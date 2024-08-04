@@ -1,12 +1,97 @@
-
+#ifndef PLAYER_H
+#define PLAYER_H
 #pragma once
 
 #include <string>
-
+#include "memory"
+#include "algorithm"
+#include "./Events/Event.h"
 using std::string;
 
-class Player {
+class Encounter;
+
+//class PlayerStrategy {
+//public:
+//    virtual string getStrategy() = 0;
+//};
+//
+//// Concrete Strategy for Close Fighting
+//class CloseFighter : public PlayerStrategy {
+//public:
+//    string getStrategy() override {
+//        return "CloseFighter";
+//    }
+//};
+//
+//// Concrete Strategy for Distance Fighting
+//class DistanceFighter : public PlayerStrategy {
+//public:
+//    string getStrategy() override {
+//        return "DistanceFighter";
+//    }
+//
+//};
+
+class Character {
 public:
+    virtual string getBehavior()=0;
+};
+
+class Responsible : public Character {
+    string getBehavior() override {
+        return "Responsible";
+    }
+};
+class RiskTaking : public Character {
+    string getBehavior() override{
+        return "RiskTaking";
+    }
+};
+
+
+
+class Jop {
+public:
+    virtual string getJob()=0;
+};
+class Warrior : public Jop{
+    string getJob() override {
+        return "Warrior";
+    }
+
+};
+class Archer : public Jop{
+    string getJob() override {
+        return "Archer";
+    }
+};
+class Magician : public Jop{
+    string getJob() override {
+        return "Magician";
+    }
+};
+
+
+
+
+
+class Player {
+protected:
+    string name;
+    int level;
+    int Force;
+    int current_HP;
+    int Max_HP;
+    int coins;
+
+    std::shared_ptr<Character> character;
+    std::shared_ptr<Jop> job;
+
+public:
+    /// constructor ///
+    Player(string& name1 , std::shared_ptr<Jop>& job1 , std::shared_ptr<Character>& character1);
+
+
     /**
      * Gets the description of the player
      *
@@ -48,4 +133,15 @@ public:
      * @return - coins of the player
     */
     int getCoins() const;
+
+    int getCompetPower();
+
+
+    void updateForce();
+
+    int payhealth();
+    string playEncounter(const std::shared_ptr<Encounter>& clash);
 };
+
+
+#endif // PLAYER_H

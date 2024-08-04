@@ -3,9 +3,52 @@
 
 #include "Utilities.h"
 
+
+
+bool compare_player(const shared_ptr<Player>& player1 , const shared_ptr<Player>& player2 ){
+    if (player1->getLevel() > player2->getLevel()) return true;
+    if (player1->getLevel() < player2->getLevel()) return false;
+
+
+    if (player1->getCoins() > player2->getCoins()) return true;
+    if (player1->getCoins() < player2->getCoins()) return false;
+
+
+    return player1->getName() < player2->getName();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
 
     /*===== TODO: Open and read events file =====*/
+
 
     /*==========================================*/
 
@@ -27,7 +70,21 @@ void MatamStory::playTurn(Player& player) {
      * 3. Play the event
      * 4. Print the turn outcome with "printTurnOutcome"
     */
-
+std::shared_ptr<Event> event = Events.front();
+Events.pop();
+Events.push(event);
+    printTurnDetails(m_turnIndex,*players[index],*event);
+    string result = (*players[index]).playEncounter(event->getEncounter());
+    if(result == "Won"){
+       result = getEncounterLostMessage(*players[index],event->getEncounter()->getloot());
+    }else if (result == "Lose"){
+      result =   getEncounterLostMessage(*players[index] , event->getEncounter()->getdamage());
+    } else if (event->getEncounter()->getTupe() == "SolarEclips"){
+       result = getSolarEclipseMessage(*players[index],stoi(result));
+    } else {
+        result = getPotionsPurchaseMessage(*players[index] ,stoi(result));
+    }
+    printTurnOutcome(result);
     m_turnIndex++;
 }
 
@@ -59,6 +116,9 @@ bool MatamStory::isGameOver() const {
 void MatamStory::play() {
     printStartMessage();
     /*===== TODO: Print start message entry for each player using "printStartPlayerEntry" =====*/
+    for (size_t i = 0; i < players.size() ; i++) {
+        printStartPlayerEntry(i+1,*players[i]);
+    }
 
     /*=========================================================================================*/
     printBarrier();
@@ -72,3 +132,4 @@ void MatamStory::play() {
 
     /*========================================================================*/
 }
+////////

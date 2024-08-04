@@ -5,12 +5,23 @@
 
 #include "Players/Player.h"
 #include "Events/Event.h"
+#include "vector"
+#include "memory"
+#include "queue"
+
+using std::queue;
+using std::vector;
+using std::shared_ptr;
+using std::string;
+
 
 
 class MatamStory{
 private:
+    queue<shared_ptr<Event>> Events;
+    vector<shared_ptr<Player>> players;
     unsigned int m_turnIndex;
-
+    size_t index;
     /**
      * Playes a single turn for a player
      *
