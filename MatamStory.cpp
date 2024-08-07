@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <memory>
 
-
+using std::make_shared;
 using namespace std;
 
 class InvalidPlayersFileException : public std::exception {
@@ -88,52 +88,74 @@ bool checkevent(vector<string>& encounter){
 
 
 
-bool checkpleayer(const string& line){
+vector<string> getevent(const string& line) {
+    vector<string> event;
+    istringstream iss(line);
+    string temp;
 
+    while (iss >> temp) {
+        event.push_back(temp);
+    }
+
+    return event;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-std::vector<std::string> getEventData(std::istringstream& iss) {
+vector<string> getEventData(std::istringstream& iss) {
     std::vector<std::string> eventData;
     std::string token;
-
-    // Extract tokens from the stream until a newline or end of stream
     while (iss >> token) {
         eventData.push_back(token);
     }
+    return eventData;
+}
 
-    return eventData; // Return the vector containing parsed event data
+
+//bool checkpleayer(const string& line){
+//
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+std::vector<std::string> parseLine(const std::string& line) {
+    std::vector<std::string> tokens; // Vector to hold the parsed tokens
+    std::istringstream iss(line); // Create a string stream from the line
+    std::string token;
+
+    // Extract each word (token) from the line
+    while (iss >> token) {
+        tokens.push_back(token); // Add each token to the vector
+    }
+
+    return tokens; // Return the vector of tokens
 }
 
 
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
-std::string line;
+
     /*===== TODO: Open and read events file =====*/
 //    while (getline(eventsStream,line)){
 //        istringstream iss(line);
@@ -150,7 +172,125 @@ std::string line;
 //        }
 //    }
 
+    string line;
 
+    // Read events from the events stream
+    while (getline(eventsStream, line)) {
+        vector<string> event = parseLine(line); // Ensure parseLine is correctly implemented
+        if (!checkevent(event)) { // Validate the event
+            throw InvalidEventsFileException();
+        }
+
+        // Create events based on type using make_shared
+        if (event[0] == "Slime") {
+            Events.push(make_shared<Event>(make_shared<Slime>()));
+        } else if (event[0] == "Snail") {
+            Events.push(make_shared<Event>(make_shared<Snail>()));
+        } else if (event[0] == "Balrorg") {
+            Events.push(make_shared<Event>(make_shared<Balrorg>()));
+        } else if (event[0] == "SolarEclipse") {
+            Events.push(make_shared<Event>(make_shared<SolarEclips>()));
+        } else if (event[0] == "PotionsMerchant") {
+            Events.push(make_shared<Event>(make_shared<PotionsMerchant>()));
+        } else if (event[0] == "Pack") {
+            // Check the number of monsters in the pack
+            if (event.size() < 3) {
+                throw InvalidEventsFileException(); // Ensure there's a pack size defined
+            }
+            vector<shared_ptr<Encounter>> packMembers;
+            for (size_t i = 2; i < event.size(); ++i) {
+                if (event[i] == "Slime") {
+                    packMembers.push_back(make_shared<Slime>());
+                } else if (event[i] == "Snail") {
+                    packMembers.push_back(make_shared<Snail>());
+                } else if (event[i] == "Balrorg") {
+                    packMembers.push_back(make_shared<Balrorg>());
+                } else {
+                    throw InvalidEventsFileException(); // Invalid monster type in the pack
+                }
+            }
+            Events.push(make_shared<Event>(make_shared<Pack>(vector<Monsters> (vector<Encounter> packMembers))));
+        } else {
+            throw InvalidEventsFileException(); // Unknown event type
+        }
+    }
+    while (std::getline(players, line1)) {
+        if (!checkIsPlayerValid(line1)) {
+            throw InvalidPlayersFile();
+        }
+
+        std::istringstream iss(line1); // Define std::istringstream inside the loop
+        std::string name, job, behavior;
+
+        if (!(iss >> name >> job >> behavior)) {
+            throw InvalidPlayersFileException();
+        }
+
+        std::shared_ptr<Jop> jobPtr;
+        if (job == "Warrior") {
+            jobPtr = std::make_shared<Warrior>();
+        } else if (job == "Archer") {
+            jobPtr = std::make_shared<Archer>();
+        }else if ( job == "Magician"){
+            jobPtr = make_shared<Magician>();
+        } else {
+            throw InvalidPlayersFileException();
+        }
+
+        std::shared_ptr<Character> behaviorPtr;
+        if (behavior == "Responsible") {
+            behaviorPtr = std::make_shared<Responsible>();
+        } else if (behavior == "RiskTaking") {
+            behaviorPtr = std::make_shared<RiskTaking>();
+        } else {
+            throw InvalidPlayersFileException();
+        }
+
+        std::shared_ptr<Player> playerPtr = std::make_shared<Player>(name, jobPtr, behaviorPtr);
+        players.push_back(playerPtr);
+    }
+
+    players.close();
+
+    if (players.size() > 6 || players.size() < 2) {
+        throw InvalidPlayersFileException();
+    }
+    // Read players from the players stream
+//    while (getline(playersStream, line)) {
+//        istringstream iss(line);
+//        string name, job, character;
+//        iss >> name >> job >> character;
+//
+//        // Validate player attributes
+//        if (name.length() < 3 || name.length() > 15 ||
+//            (job != "Warrior" && job != "Magician" && job != "Archer") ||
+//            (character != "Responsible" && character != "RiskTaking")) {
+//            throw InvalidPlayersFileException();
+//        }
+//
+//        // Create job and character based on the string values
+//        std::shared_ptr<Jop> jobPtr;
+//        if (job == "Warrior") {
+//            jobPtr = make_shared<Warrior>();
+//        } else if (job == "Magician") {
+//            jobPtr = make_shared<Magician>();
+//        } else if (job == "Archer") {
+//            jobPtr = make_shared<Archer>();
+//        }
+//
+//        std::shared_ptr<Character> characterPtr;
+//        if (character == "Responsible") {
+//            characterPtr = make_shared<Responsible>();
+//        } else if (character == "RiskTaking") {
+//            characterPtr = make_shared<RiskTaking>();
+//        }
+//
+//        // Create a new player and add it to the players list
+//        shared_ptr<Player> player = make_shared<Player>(name, jobPtr, characterPtr);
+//        players.push_back(player);
+//    }
+    this->m_turnIndex = 1; // Initialize turn index
+}
 
     /*==========================================*/
 
@@ -160,8 +300,8 @@ std::string line;
     /*============================================*/
 
 
-    this->m_turnIndex = 1;
-}
+//    this->m_turnIndex = 1;
+//}
 
 void MatamStory::playTurn(Player& player) {
 
@@ -214,7 +354,7 @@ void MatamStory::playRound() {
     vector<shared_ptr<Player>> sortedplayers = players;
     sort(sortedplayers.begin(),sortedplayers.end(), compare_players);
 
-    for (int i = 0; i < sortedplayers.size(); ++i) {
+    for (size_t i = 0; i < sortedplayers.size(); ++i) {
         printLeaderBoardEntry(i+1, *sortedplayers[i]);
     }
 
@@ -225,7 +365,7 @@ void MatamStory::playRound() {
 
 bool MatamStory::isGameOver() const {
     /*===== TODO: Implement the game over condition =====*/
-    int player_died = 0;
+    size_t player_died = 0;
 
     for (const auto & player : players) {
         if(player->getHealthPoints() == 0){
@@ -235,11 +375,16 @@ bool MatamStory::isGameOver() const {
     if(player_died == players.size()){
         return true;
     }
-    for (int i = 0; i < players.size(); ++i) {
-        if (players[i]->getLevel() == 10){
+    for (const auto  & player :players) {
+        if (player->getLevel() == 10){
             return true;
         }
     }
+//    for (int i = 0; i < players.size(); ++i) {
+//        if (players[i]->getLevel() == 10){
+//            return true;
+//        }
+//    }
     return false; // Replace this line
     /*===================================================*/
 }

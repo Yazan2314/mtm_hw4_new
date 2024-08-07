@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Players/Player.h"
-#include "Events/Event.h"
+//#include "Events/Event.h"
 #include "vector"
 #include "memory"
 #include "queue"
@@ -44,6 +44,16 @@ private:
      * @return - true if the game is over, false otherwise
     */
     bool isGameOver() const;
+    // Factory function to create events
+//    shared_ptr<Event> createEvent(const string& eventType) {
+//        if (eventType == "Slime") {
+//            return shared_ptr<Event>(new Event(shared_ptr<Encounter>(new Slime())));
+//        } else if (eventType == "Snail") {
+//            return shared_ptr<Event>(new Event(shared_ptr<Encounter>(new Snail())));
+//        }
+//        // Add more event types as needed
+//        return nullptr; // Return nullptr for unknown event types
+//    }
 
 public:
     /**

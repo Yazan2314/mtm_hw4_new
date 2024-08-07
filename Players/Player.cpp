@@ -1,7 +1,10 @@
 #include "Player.h"
 
-Player::Player(std::string &name1, std::shared_ptr<Jop> &job1, std::shared_ptr<Character> &character1)
-: name(name1) , character(character1),job(job1){
+Player::Player(std::string& name1, std::shared_ptr<Jop> &job1, std::shared_ptr<Character> &character1)
+{
+    this->name = name1;
+    this->job = job1;
+    this->character = character1;
     if (job1->getJob() == "Archer"){
         this->coins = 20;
     }else {
@@ -9,11 +12,12 @@ Player::Player(std::string &name1, std::shared_ptr<Jop> &job1, std::shared_ptr<C
     }
     if(job1->getJob() == "Warrior"){
         this->Max_HP = 150;
-        this->current_HP = 150;
+
     }else {
         this->Max_HP = 100;
-        this->current_HP = 100;
+
     }
+    this->current_HP = Max_HP;
     this->level = 1;
     this->Force = 5;
 }
@@ -39,9 +43,6 @@ int Player::getHealthPoints() const {
     return current_HP;
 }
 int Player::getCoins() const {
-    if (job->getJob() == "Archer"){
-
-    }
     return coins;
 }
 
@@ -96,7 +97,8 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                 current_HP -= 10;
                 current_HP = std::max(0, current_HP);
             }
-            if (clashking == "Balrorg") {
+
+            if (clashking == "Balrorg" ) {
                 auto balrog = std::dynamic_pointer_cast<Balrorg>(clash); // Dynamic cast
                 if (balrog) {
                     balrog->increaseCombatPower();
@@ -106,7 +108,12 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
             } else {
                 current_HP -= clash->getdamage();
                 current_HP = std::max(0, current_HP);
-
+            if (clashking == "Balrorg") {
+                auto balrog = std::dynamic_pointer_cast<Balrorg>(clash); // Dynamic cast
+                if (balrog) {
+                    balrog->increaseCombatPower();
+                }
+            }
                 return "Lost";
             }
         } else if (clashking == "SolarEclips") {

@@ -84,8 +84,9 @@ protected:
     int Max_HP;
     int coins;
 
-    std::shared_ptr<Character> character;
     std::shared_ptr<Jop> job;
+    std::shared_ptr<Character> character;
+
 
 public:
     /// constructor ///
