@@ -23,7 +23,7 @@
 
     class Encounter {
     public:
-        virtual ~Encounter() = default;
+//        virtual ~Encounter() = default;
         virtual string getDescription() = 0;
         virtual string getTupe() = 0;
         virtual int getcombatPower(){
@@ -59,7 +59,7 @@
         loot = 2;
         damage = 10;
     }
-    string getTupe(){
+    string getTupe() override{
         return "Snail";
     }
 
@@ -75,7 +75,7 @@
         }
         string getDescription() override {
             return getTupe() + " (power " + std::to_string( getcombatPower())
-            + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage());
+            + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
 
@@ -83,7 +83,7 @@
     ///////////////////////////////////// Slime /////////////////////////////////////////
     class Slime : public Monsters {
     public:
-//        Slime(): Monsters(12,5,25){}
+
 
         string getTupe() override{
             return "Slime";
@@ -99,7 +99,7 @@
         }
         string getDescription() override {
             return getTupe() + " (power " + std::to_string( getcombatPower())
-                   + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage());
+                   + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
 
@@ -111,12 +111,12 @@
     };
     class Balrog : public Monsters {
     public:
-        Balrorg(){
+        Balrog(){
             combatPower = 15;
             loot = 100;
             damage = 9001;
         }
-//        Balrog(): Monsters(15,100,9001){}
+
 
         string getTupe() override {
             return "Balrog";
@@ -132,7 +132,7 @@
         }
         string getDescription() override {
             return getTupe() + " (power " + std::to_string( getcombatPower())
-                   + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage());
+                   + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
     };
@@ -140,7 +140,7 @@
     protected:
 
         size_t size;
-//        std::vector<std::shared_ptr<Monsters>> monsters;
+        std::vector<std::shared_ptr<Monsters>> monsters;
     public:
 //        Pack(const std::vector<std::shared_ptr<Monsters>>& monsters)
 //            : Monsters(0, 0, 0), size(monsters.size()), monsters(monsters) {
@@ -164,9 +164,9 @@
                 damage += monster->getdamage();
             }
         }
-//        std::vector<std::shared_ptr<Monsters>> getMonsters() const {
-//            return monsters;
-//        }
+        std::vector<std::shared_ptr<Monsters>> getMonsters() const {
+            return monsters;
+        }
 
                 string getTupe() override {
             return "Pack";
@@ -181,15 +181,15 @@
             return damage;
         }
         string getDescription() override {
-            return "Pack of " + std::to_string(size)  + " (power " + std::to_string( getcombatPower())
-                   + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage());
+            return "Pack of " + std::to_string(size) + " members" + " (power " + std::to_string( getcombatPower())
+                   + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
     };
 
 ///////////////// specialevent /////////////////////////////////////////////
     class SpecialEvent : public Encounter {
-//        virtual ~SpecialEvent() = default;
+
     };
 
     class SolarEclips : public SpecialEvent  {

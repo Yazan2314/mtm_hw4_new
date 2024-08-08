@@ -51,12 +51,22 @@ class RiskTaking : public Character {
 
 
 class Jop {
+//protected:
+//    std::unique_ptr<PlayerStrategy> strategy;
 public:
     virtual string getJob()=0;
+    virtual string getstrategy() = 0;
+    virtual bool usingMagic() = 0;
 };
 class Warrior : public Jop{
     string getJob() override {
         return "Warrior";
+    }
+    string getstrategy() override {
+        return "CloseFighter";
+    }
+    bool usingMagic() override {
+        return false;
     }
 
 };
@@ -64,10 +74,22 @@ class Archer : public Jop{
     string getJob() override {
         return "Archer";
     }
+    string getstrategy() override {
+        return "DistanceFighter";
+    }
+    bool usingMagic() override {
+        return false;
+    }
 };
 class Magician : public Jop{
     string getJob() override {
         return "Magician";
+    }
+    string getstrategy() override {
+        return "DistanceFighter";
+    }
+    bool usingMagic() override {
+        return true;
     }
 };
 
@@ -143,16 +165,7 @@ public:
     int payhealth();
     string playEncounter(const std::shared_ptr<Encounter>& clash);
 
-private:
-    /**
-  * Factory method for creating jobs
-  */
-    static std::shared_ptr<Jop> createJob(const std::string& jobType);
 
-    /**
-     * Factory method for creating characters
-     */
-    static std::shared_ptr<Character> createCharacter(const std::string& characterType);
 
 };
 

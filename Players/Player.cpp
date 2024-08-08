@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "exception"
-Player::Player(std::string& name1, std::shared_ptr<Jop> &job1, std::shared_ptr<Character> &character1) :name(std::move(name1))
+Player::Player(std::string& name1, std::shared_ptr<Jop>& job1, std::shared_ptr<Character>& character1)
 {
     this->name = name1;
     this->job = job1;
@@ -54,7 +54,7 @@ int Player::getCompetPower() {
 }
 
 void Player::updateForce() {
-    if (job->getJob() == "Magician"){
+    if (job->usingMagic()){
         Force++;
     }else{
         Force--;
@@ -85,6 +85,7 @@ int Player::payhealth() {
 string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
     std::string clashking = clash->getTupe();
     std::string jobTupe = job->getJob();
+    std::string  strategy = job->getstrategy();
     std::string charecterTupe = character->getCharacter();
 
     int combatpower = getCompetPower();
@@ -93,10 +94,11 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
         if (combatpower > clash->getcombatPower()) {
             level++;
             coins += clash->getloot();
-            if (jobTupe == "Warrior") {
+            if (strategy == "CloseFighter") {
                 current_HP -= 10;
                 current_HP = std::max(0, current_HP);
             }
+
 
 
             if (clashking == "Balrog") {
@@ -118,7 +120,11 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                     }
                 }
             }
-            return "Won";
+            return "win";
+        } else if (strategy == "CloseFighter" && clash->getdamage() < 10) {
+         current_HP -= 10;
+         current_HP = std::max(0,current_HP);
+
         } else {
             current_HP -= clash->getdamage();
             current_HP = std::max(0, current_HP);
@@ -152,27 +158,8 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
         int amount = payhealth();
         return std::to_string(amount);
     }
-    return "";
+    return "3"; // test
 
 }
 
-std::shared_ptr<Jop> Player::createJob(const std::string& jobType) {
-    if (jobType == "Warrior") {
-        return std::make_shared<Warrior>();
-    } else if (jobType == "Archer") {
-        return std::make_shared<Archer>();
-    } else if (jobType == "Magician") {
-        return std::make_shared<Magician>();
-    }
-    throw std::invalid_argument("Invalid job type");
-}
 
-// Factory method for creating characters
-std::shared_ptr<Character> Player::createCharacter(const std::string& characterType) {
-    if (characterType == "Responsible") {
-        return std::make_shared<Responsible>();
-    } else if (characterType == "RiskTaking") {
-        return std::make_shared<RiskTaking>();
-    }
-    throw std::invalid_argument("Invalid character type");
-}

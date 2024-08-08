@@ -120,21 +120,21 @@ bool check_player_valid(const vector<string>& playerData) {
 
     const string& name = playerData[0];
     const string& job = playerData[1];
-    const string& behavior = playerData[2];
+    const string& character = playerData[2];
 
     if (name.empty() || !std::all_of(name.begin(), name.end(), ::isalpha)) {
         return false; // Name must be non-empty and consist only of alphabetic characters
     }
 
     if (job != "Warrior" && job != "Archer" && job != "Magician") {
-        return false; // Invalid job
+        return false;
     }
 
-    if (behavior != "Responsible" && behavior != "RiskTaking") {
-        return false; // Invalid behavior
+    if (character != "Responsible" && character != "RiskTaking") {
+        return false;
     }
 
-    return true; // All checks passed
+    return true;
 }
 
 
@@ -161,9 +161,28 @@ vector<string> getEventData(std::istringstream& iss) {
 }
 
 
-//bool checkpleayer(const string& line){
-//
-//}
+
+vector<string> getEvent (string line)
+{
+    vector<string> event;
+    string tmp="";
+    size_t i=0;
+    while(i < line.size())
+    {
+        if(line[i] != ' ')
+        {
+            tmp += line[i];
+        }
+        else {
+            event.push_back(tmp);
+            tmp = "";
+        }
+        i++;
+    }
+    if(tmp != "")
+        event.push_back(tmp);
+    return event;
+}
 
 vector<string> checakspacess(string line) {
     vector<string> player;
@@ -187,87 +206,116 @@ vector<string> checakspacess(string line) {
 
 
 
+vector<string> getevent3(istringstream& eventstream);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-std::vector<std::string> parseLine(const std::string& line) {
-    std::vector<std::string> tokens; // Vector to hold the parsed tokens
-    std::istringstream iss(line); // Create a string stream from the line
-    std::string token;
-
-    // Extract each word (token) from the line
-    while (iss >> token) {
-        tokens.push_back(token); // Add each token to the vector
-    }
-
-    return tokens; // Return the vector of tokens
-}
-vector<string> getCard2(ifstream& deck) {
-    vector<string> card;
+vector<string> getevent2(istringstream& eventstram) {
+    vector<string> event;
     string name;
-    deck >> name;
-    if(deck.fail()) {
-        InvalidPlayersFileException invalid = InvalidPlayersFileException();
-        // invalid.extra = string("deck failed to read card name");
-        throw InvalidPlayersFileException();
+    eventstram >> name;
+    if (eventstram.fail()) {
+        throw InvalidEventsFileException();
     }
-    if(name=="Snail" || name=="Slime" || name == "Balrorg" || name == "SolarEclipse" || name == "PotionsMerchant") {
-        card.push_back(name);
-        return card;
+    if (name == "Snail" || name == "Slime" || name == "Balrog" || name == "SolarEclips"  || name == "PotionsMerchant") {
+        event.push_back(name);
+        return event;
     }
-    if(name != "Pack") {
-        InvalidPlayersFileException invalid = InvalidPlayersFileException();
-        invalid.extra = name + " is not a card";
-        throw InvalidPlayersFileException();
+    if (name != "Pack") {
+        throw InvalidEventsFileException();
     }
-    card.push_back(name); // should be gang
+    event.push_back(name); // should be pack
     int count;
     std::string input;
 
-    if (!(deck >> input)) {
-        throw InvalidPlayersFileExceptione();
+    if (!(eventstram >> input)) {
+        throw InvalidEventsFileException();
     }
 
     try {
         count = std::stoi(input);
     } catch (const std::invalid_argument& e) {
-        throw InvalidCardsFile();
+        throw InvalidEventsFileException();
     } catch (const std::out_of_range& e) {
-        throw InvalidCardsFile();
+        throw InvalidEventsFileException();
     }
 
     if (count <= 1) {
-        throw InvalidCardsFile();
+        throw InvalidEventsFileException();
     }
 
-    card.push_back(std::to_string(count));
+    event.push_back(std::to_string(count));
 
     for (int i = 0; i < count; i++) {
-        std::vector<std::string> monstercards = getCard3(deck);
-        for (const std::string& s : monstercards) {
-            card.push_back(s);
+        std::vector<string> monsterencounter = getevent3(eventstram);
+        for (const string& s : monsterencounter) {
+            event.push_back(s);
         }
     }
 
-    return card;
-
+    return event;
 }
+
+vector<string> getevent3(istringstream& eventstream) {
+    vector<string> event;
+    string name;
+    eventstream >> name;
+
+    if (eventstream.fail()) {
+        throw InvalidEventsFileException();
+    }
+    if (name == "Snail" || name == "Balrog" || name == "Slime") {
+        event.push_back(name);
+        return event;
+    }
+
+    if (name != "Pack") {
+        throw InvalidEventsFileException();
+    }
+    event.push_back(name); // should be pack
+    int count;
+    std::string input;
+
+    if (!(eventstream >> input)) {
+        throw InvalidEventsFileException();
+    }
+
+    try {
+        count = std::stoi(input);
+    } catch (const std::invalid_argument& e) {
+        throw InvalidEventsFileException();
+    } catch (const std::out_of_range& e) {
+        throw InvalidEventsFileException();
+    }
+
+    if (count <= 1) {
+        throw InvalidEventsFileException();
+    }
+
+    event.push_back(std::to_string(count));
+
+    for (int i = 0; i < count; i++) {
+        std::vector<string> monsterencounter = getevent3(eventstream);
+        for (const string& s : monsterencounter) {
+            event.push_back(s);
+        }
+    }
+
+    return event;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start) {
     vector<shared_ptr<Monsters>> monsters;
     size_t size = stoi(event[start]);
@@ -299,16 +347,59 @@ vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start) {
     start = i;
     return monsters;
 }
-
-
+//vector<string> get_card(ifstream& eventStream) {
+//    vector<string> event;
+//    string name;
+//    eventStream >> name;
+//    if (eventStream.fail()) {
+//        throw InvalidEventsFileException();
+//    }
+//    if (name == "Snail" || name == "Slime" || name == "Balrog" || name == "SolarEclipse" || name == "PotionsMerchant") {
+//        event.push_back(name);
+//        return event;
+//    }
+//    if (name != "Pack") {
+//        throw InvalidEventsFileException();
+//    }
+//    event.push_back(name); // should be pack
+//    int count;
+//    std::string input;
+//
+//    if (!(eventStream >> input)) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    try {
+//        count = std::stoi(input);
+//    } catch (const std::invalid_argument&) {
+//        throw InvalidEventsFileException();
+//    } catch (const std::out_of_range&) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    if (count <= 1) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    event.push_back(std::to_string(count));
+//
+//    for (int i = 0; i < count; i++) {
+//        std::vector<string> monsterCards = get_card(eventStream);
+//        event.insert(event.end(), monsterCards.begin(), monsterCards.end());
+//    }
+//    return event;
+//}
+//
 
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
+    index = 0;
     string line;
     while(getline(eventsStream,line)){
-        vector<string> event = getevent(line);
-        if (!checkevent(event)){
-            throw InvalidPlayersFileException();
-        }
+
+            std::istringstream eventStream(line);
+            vector<string> event = getevent2(eventStream);
+
+
 
         shared_ptr<Encounter> encounter;
         if (event[0] == "Snail"){
@@ -319,7 +410,7 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
         encounter = make_shared<Balrog>();
         } else if (event[0] == "Pack"){
             int size = stoi(event[1]);
-            int start = 2;
+            int start = 1;
             vector<shared_ptr<Monsters>> monsters = getMonsters(event,start);
             encounter = make_shared<Pack>(monsters,size);
         } else if (event[0] == "SolarEclips"){
@@ -327,7 +418,7 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
         } else if (event[0] == "PotionsMerchant"){
             encounter = make_shared<PotionsMerchant>();
         } else {
-            throw InvalidPlayersFileException();
+            throw InvalidEventsFileException();
         }
 
 
@@ -407,14 +498,14 @@ Events.pop();
 Events.push(event);
     printTurnDetails(m_turnIndex,*players[index],*event);
     string result = (*players[index]).playEncounter(event->getEncounter());
-    if(result == "Won"){
-       result = getEncounterLostMessage(*players[index],event->getEncounter()->getloot());
-    }else if (result == "Lose"){
+    if(result == "win"){
+       result = getEncounterWonMessage(*players[index],event->getEncounter()->getloot());
+    }else if (result == "Lost"){
       result =   getEncounterLostMessage(*players[index] , event->getEncounter()->getdamage());
     } else if (event->getEncounter()->getTupe() == "SolarEclips"){
-       result = getSolarEclipseMessage(*players[index],stoi(result));
-    } else {
-        result = getPotionsPurchaseMessage(*players[index] ,stoi(result));
+       result = getSolarEclipseMessage(*players[index], stoi(result));
+    } else if (event->getEncounter()->getTupe() == "PotionsMerchant") {
+        result = getPotionsPurchaseMessage(*players[index] , stoi(result));
     }
     printTurnOutcome(result);
     m_turnIndex++;
@@ -425,7 +516,7 @@ void MatamStory::playRound() {
     printRoundStart();
 
     /*===== TODO: Play a turn for each player =====*/
-    for ( ; index < players.size(); ++index) {
+    for (index = 0 ; index < players.size(); ++index) {
 
         if(players[index]->getHealthPoints() == 0){
             continue;
@@ -433,6 +524,8 @@ void MatamStory::playRound() {
             playTurn(*players[index]);
         }
     }
+
+    index = 0;
 
     /*=============================================*/
 
