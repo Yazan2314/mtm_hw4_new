@@ -24,7 +24,7 @@ Player::Player(std::string& name1, std::shared_ptr<Jop>& job1, std::shared_ptr<C
 
 string Player::getDescription() const {
     return name + ", " + this->job->getJob() + " with " + this->character->getCharacter()
-    + " character" + "(level " +std::to_string(level) +", force" + std::to_string(Force)  +")";
+    + " character " + "(level " +std::to_string(level) +", force " + std::to_string(Force)  +")";
 }
 
 string Player::getName() const {
@@ -124,6 +124,26 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
         } else if (strategy == "CloseFighter" && clash->getdamage() < 10) {
          current_HP -= 10;
          current_HP = std::max(0,current_HP);
+            if (clashking == "Balrog") {
+                auto balrog = std::dynamic_pointer_cast<Balrog>(clash); // Dynamic cast
+                if (balrog) {
+                    balrog->increaseCombatPower();
+                }
+            }
+            if (clashking == "Pack") {
+                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
+                if (pack) {
+                    for (const auto &monster: pack->getMonsters()) {
+                        if (monster->getTupe() == "Balrog") {
+                            auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
+                            if (balrog) {
+                                balrog->increaseCombatPower();
+                            }
+                        }
+                    }
+                }
+            }
+            return "lost";
 
         } else {
             current_HP -= clash->getdamage();
@@ -149,7 +169,7 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
             }
             return "Lost";
         }
-    } else if (clashking == "SolarEclips") {
+    } else if (clashking == "SolarEclipse") {
         int prev = Force;
         updateForce();
         return std::to_string(Force - prev);
@@ -158,7 +178,7 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
         int amount = payhealth();
         return std::to_string(amount);
     }
-    return "3"; // test
+    return ""; // test
 
 }
 

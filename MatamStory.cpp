@@ -73,7 +73,7 @@ bool checkevent(vector<string>& encounter){
         return false;
     }
     if(encounter[0] != "Snail" && encounter[0] != "Slime" &&
-    encounter[0] != "Balrog" && encounter[0] != "Pack" && encounter[0] != "SolarEclips" && encounter[0] != "PotionsMerchant"){
+    encounter[0] != "Balrog" && encounter[0] != "Pack" && encounter[0] != "SolarEclipse" && encounter[0] != "PotionsMerchant"){
         return false;
     }
     if (encounter[0] != "Pack" && encounter.size() > 1){
@@ -216,7 +216,7 @@ vector<string> getevent2(istringstream& eventstram) {
     if (eventstram.fail()) {
         throw InvalidEventsFileException();
     }
-    if (name == "Snail" || name == "Slime" || name == "Balrog" || name == "SolarEclips"  || name == "PotionsMerchant") {
+    if (name == "Snail" || name == "Slime" || name == "Balrog" || name == "SolarEclipse"  || name == "PotionsMerchant") {
         event.push_back(name);
         return event;
     }
@@ -322,7 +322,7 @@ vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start) {
     size_t i = start + 1;
 
     while (i < start + 1 + size && i < event.size()) {
-        if (event[i] == "Gang") {
+        if (event[i] == "Pack") {
             int size_2 = stoi(event[i + 1]);
             int nested_start = i + 2;
             vector<shared_ptr<Monsters>> gm = getMonsters(event, nested_start);
@@ -413,8 +413,8 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
             int start = 1;
             vector<shared_ptr<Monsters>> monsters = getMonsters(event,start);
             encounter = make_shared<Pack>(monsters,size);
-        } else if (event[0] == "SolarEclips"){
-            encounter = make_shared<SolarEclips>();
+        } else if (event[0] == "SolarEclipse"){
+            encounter = make_shared<SolarEclipse>();
         } else if (event[0] == "PotionsMerchant"){
             encounter = make_shared<PotionsMerchant>();
         } else {
@@ -502,7 +502,7 @@ Events.push(event);
        result = getEncounterWonMessage(*players[index],event->getEncounter()->getloot());
     }else if (result == "Lost"){
       result =   getEncounterLostMessage(*players[index] , event->getEncounter()->getdamage());
-    } else if (event->getEncounter()->getTupe() == "SolarEclips"){
+    } else if (event->getEncounter()->getTupe() == "SolarEclipse"){
        result = getSolarEclipseMessage(*players[index], stoi(result));
     } else if (event->getEncounter()->getTupe() == "PotionsMerchant") {
         result = getPotionsPurchaseMessage(*players[index] , stoi(result));

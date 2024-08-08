@@ -192,12 +192,12 @@
 
     };
 
-    class SolarEclips : public SpecialEvent  {
+    class SolarEclipse : public SpecialEvent  {
         string getTupe() override {
-            return "SolarEclips";
+            return "SolarEclipse";
         }
         string getDescription() override{
-            return "SolarEclips";
+            return "SolarEclipse";
         }
 
     };
