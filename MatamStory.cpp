@@ -8,6 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <memory>
+#include <cctype>
 
 using std::make_shared;
 using namespace std;
@@ -43,7 +44,7 @@ bool check_pack_recursive(vector<string>& pack, size_t& index) {
     int count = 0;
     for (index = 2; index <pack.size() ; ++index) {
 
-        if (pack[index] != "Snail" && pack[index] != "Slime" && pack[index] != "Balrorg" && pack[index] != "Pack"){
+        if (pack[index] != "Snail" && pack[index] != "Slime" && pack[index] != "Balrog" && pack[index] != "Pack"){
             return false;
         }
         count++;
@@ -72,7 +73,7 @@ bool checkevent(vector<string>& encounter){
         return false;
     }
     if(encounter[0] != "Snail" && encounter[0] != "Slime" &&
-    encounter[0] != "Balrorg" && encounter[0] != "Pack" && encounter[0] != "SolarEclips" && encounter[0] != "PotionsMerchant"){
+    encounter[0] != "Balrog" && encounter[0] != "Pack" && encounter[0] != "SolarEclips" && encounter[0] != "PotionsMerchant"){
         return false;
     }
     if (encounter[0] != "Pack" && encounter.size() > 1){
@@ -85,6 +86,57 @@ bool checkevent(vector<string>& encounter){
     return true;
 
 }
+bool cheack_Player(const std::string& line){
+    std::istringstream iss(line);
+    std::vector<std::string > playerdata;
+    std::string word;
+    while(iss >> word){
+        playerdata.push_back(word);
+    }
+    if (playerdata.size() != 3){
+        return false;
+    }
+    if (playerdata[0].size() < 3 || playerdata[0].size() > 15){
+        return false;
+    }
+    // Check if name consists only of alphabetic characters
+    for (char c : playerdata[0]) {
+        if (!std::isalpha(c)) {
+            return false;
+        }
+    }
+    if (playerdata[1] != "Warrior" && playerdata[1] != "Magician" && playerdata[1] != "Archer"){
+        return false;
+    }
+    if (playerdata[2]  != "RiskTaking" && playerdata[2] != "Responsible" ){
+        return false;
+    }
+    return true;
+}
+bool check_player_valid(const vector<string>& playerData) {
+    if (playerData.size() != 3) {
+        return false; // Invalid number of fields
+    }
+
+    const string& name = playerData[0];
+    const string& job = playerData[1];
+    const string& behavior = playerData[2];
+
+    if (name.empty() || !std::all_of(name.begin(), name.end(), ::isalpha)) {
+        return false; // Name must be non-empty and consist only of alphabetic characters
+    }
+
+    if (job != "Warrior" && job != "Archer" && job != "Magician") {
+        return false; // Invalid job
+    }
+
+    if (behavior != "Responsible" && behavior != "RiskTaking") {
+        return false; // Invalid behavior
+    }
+
+    return true; // All checks passed
+}
+
 
 
 
@@ -113,10 +165,24 @@ vector<string> getEventData(std::istringstream& iss) {
 //
 //}
 
-
-
-
-
+vector<string> checakspacess(string line) {
+    vector<string> player;
+    string tmp = "";
+    size_t i = 0;
+    while(i < line.size()) {
+        if(line[i] != ' ')
+        {
+            tmp += line[i];
+        }else {
+            player.push_back(tmp);
+            tmp = "";
+        }
+        i++;
+    }
+    if(tmp != "")
+        player.push_back(tmp);
+    return player;
+}
 
 
 
@@ -152,143 +218,166 @@ std::vector<std::string> parseLine(const std::string& line) {
 
     return tokens; // Return the vector of tokens
 }
+vector<string> getCard2(ifstream& deck) {
+    vector<string> card;
+    string name;
+    deck >> name;
+    if(deck.fail()) {
+        InvalidPlayersFileException invalid = InvalidPlayersFileException();
+        // invalid.extra = string("deck failed to read card name");
+        throw InvalidPlayersFileException();
+    }
+    if(name=="Snail" || name=="Slime" || name == "Balrorg" || name == "SolarEclipse" || name == "PotionsMerchant") {
+        card.push_back(name);
+        return card;
+    }
+    if(name != "Pack") {
+        InvalidPlayersFileException invalid = InvalidPlayersFileException();
+        invalid.extra = name + " is not a card";
+        throw InvalidPlayersFileException();
+    }
+    card.push_back(name); // should be gang
+    int count;
+    std::string input;
+
+    if (!(deck >> input)) {
+        throw InvalidPlayersFileExceptione();
+    }
+
+    try {
+        count = std::stoi(input);
+    } catch (const std::invalid_argument& e) {
+        throw InvalidCardsFile();
+    } catch (const std::out_of_range& e) {
+        throw InvalidCardsFile();
+    }
+
+    if (count <= 1) {
+        throw InvalidCardsFile();
+    }
+
+    card.push_back(std::to_string(count));
+
+    for (int i = 0; i < count; i++) {
+        std::vector<std::string> monstercards = getCard3(deck);
+        for (const std::string& s : monstercards) {
+            card.push_back(s);
+        }
+    }
+
+    return card;
+
+}
+vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start) {
+    vector<shared_ptr<Monsters>> monsters;
+    size_t size = stoi(event[start]);
+    size_t i = start + 1;
+
+    while (i < start + 1 + size && i < event.size()) {
+        if (event[i] == "Gang") {
+            int size_2 = stoi(event[i + 1]);
+            int nested_start = i + 2;
+            vector<shared_ptr<Monsters>> gm = getMonsters(event, nested_start);
+            i = nested_start - 1;
+            shared_ptr<Monsters> m = make_shared<Pack>(gm, size_2);
+            monsters.push_back(m);
+        } else {
+            if (event[i] == "Slime") {
+                shared_ptr<Monsters> m = make_shared<Slime>();
+                monsters.push_back(m);
+            } else if (event[i] == "Snail") {
+                shared_ptr<Monsters> m = make_shared<Snail>();
+                monsters.push_back(m);
+            } else {
+                shared_ptr<Monsters> m = make_shared<Balrog>();
+                monsters.push_back(m);
+            }
+        }
+        i++;
+    }
+
+    start = i;
+    return monsters;
+}
+
 
 
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
-
-    /*===== TODO: Open and read events file =====*/
-//    while (getline(eventsStream,line)){
-//        istringstream iss(line);
-//        vector<string> event = getEventData(iss);
-//
-//        if(event[0] == "Slime"){
-//            shared_ptr<Encounter> slimeevent (new Slime());
-//            shared_ptr<Event> ev (new Event(slimeevent));
-//            this->Events.push(ev);
-//        } else if (event[0] == "Snail"){
-//            shared_ptr<Encounter> snailevent  (new Snail());
-//            shared_ptr<Event> ev (new Event(snailevent));
-//            this->Events.push(ev);
-//        }
-//    }
-
     string line;
-
-    // Read events from the events stream
-    while (getline(eventsStream, line)) {
-        vector<string> event = parseLine(line); // Ensure parseLine is correctly implemented
-        if (!checkevent(event)) { // Validate the event
-            throw InvalidEventsFileException();
-        }
-
-        // Create events based on type using make_shared
-        if (event[0] == "Slime") {
-            Events.push(make_shared<Event>(make_shared<Slime>()));
-        } else if (event[0] == "Snail") {
-            Events.push(make_shared<Event>(make_shared<Snail>()));
-        } else if (event[0] == "Balrorg") {
-            Events.push(make_shared<Event>(make_shared<Balrorg>()));
-        } else if (event[0] == "SolarEclipse") {
-            Events.push(make_shared<Event>(make_shared<SolarEclips>()));
-        } else if (event[0] == "PotionsMerchant") {
-            Events.push(make_shared<Event>(make_shared<PotionsMerchant>()));
-        } else if (event[0] == "Pack") {
-            // Check the number of monsters in the pack
-            if (event.size() < 3) {
-                throw InvalidEventsFileException(); // Ensure there's a pack size defined
-            }
-            vector<shared_ptr<Encounter>> packMembers;
-            for (size_t i = 2; i < event.size(); ++i) {
-                if (event[i] == "Slime") {
-                    packMembers.push_back(make_shared<Slime>());
-                } else if (event[i] == "Snail") {
-                    packMembers.push_back(make_shared<Snail>());
-                } else if (event[i] == "Balrorg") {
-                    packMembers.push_back(make_shared<Balrorg>());
-                } else {
-                    throw InvalidEventsFileException(); // Invalid monster type in the pack
-                }
-            }
-            Events.push(make_shared<Event>(make_shared<Pack>(vector<Monsters> (vector<Encounter> packMembers))));
-        } else {
-            throw InvalidEventsFileException(); // Unknown event type
-        }
-    }
-    while (std::getline(players, line1)) {
-        if (!checkIsPlayerValid(line1)) {
-            throw InvalidPlayersFile();
-        }
-
-        std::istringstream iss(line1); // Define std::istringstream inside the loop
-        std::string name, job, behavior;
-
-        if (!(iss >> name >> job >> behavior)) {
+    while(getline(eventsStream,line)){
+        vector<string> event = getevent(line);
+        if (!checkevent(event)){
             throw InvalidPlayersFileException();
         }
 
-        std::shared_ptr<Jop> jobPtr;
+        shared_ptr<Encounter> encounter;
+        if (event[0] == "Snail"){
+            encounter = make_shared<Snail>();
+        } else if (event[0] == "Slime"){
+            encounter = make_shared<Slime>();
+        } else if (event[0] == "Balrog"){
+        encounter = make_shared<Balrog>();
+        } else if (event[0] == "Pack"){
+            int size = stoi(event[1]);
+            int start = 2;
+            vector<shared_ptr<Monsters>> monsters = getMonsters(event,start);
+            encounter = make_shared<Pack>(monsters,size);
+        } else if (event[0] == "SolarEclips"){
+            encounter = make_shared<SolarEclips>();
+        } else if (event[0] == "PotionsMerchant"){
+            encounter = make_shared<PotionsMerchant>();
+        } else {
+            throw InvalidPlayersFileException();
+        }
+
+
+        shared_ptr<Event> newEvent = make_shared<Event>(encounter);
+        this->Events.push(newEvent);
+    }
+
+////// todo: read players from the stream
+string line1;
+    while(getline(playersStream,line1)) {
+        if (!cheack_Player(line1)) {
+            throw InvalidPlayersFileException();
+        }
+
+        std::istringstream iss(line1);
+        string name, job, character;
+        if (!(iss >> name >> job >> character)) {
+            throw InvalidPlayersFileException();
+        }
+
+        shared_ptr<Jop> playerjob;
         if (job == "Warrior") {
-            jobPtr = std::make_shared<Warrior>();
+            playerjob = make_shared<Warrior>();
         } else if (job == "Archer") {
-            jobPtr = std::make_shared<Archer>();
-        }else if ( job == "Magician"){
-            jobPtr = make_shared<Magician>();
+            playerjob = make_shared<Archer>();
+        } else if (job == "Magician") {
+            playerjob = make_shared<Magician>();
         } else {
             throw InvalidPlayersFileException();
         }
 
-        std::shared_ptr<Character> behaviorPtr;
-        if (behavior == "Responsible") {
-            behaviorPtr = std::make_shared<Responsible>();
-        } else if (behavior == "RiskTaking") {
-            behaviorPtr = std::make_shared<RiskTaking>();
+        shared_ptr<Character> playercharacter;
+        if (character == "Responsible") {
+            playercharacter = make_shared<Responsible>();
+        } else if (character == "RiskTaking") {
+            playercharacter = make_shared<RiskTaking>();
         } else {
             throw InvalidPlayersFileException();
         }
 
-        std::shared_ptr<Player> playerPtr = std::make_shared<Player>(name, jobPtr, behaviorPtr);
-        players.push_back(playerPtr);
+        shared_ptr<Player> newPlayer = make_shared<Player>(name, playerjob, playercharacter);
+        players.push_back(newPlayer);
     }
 
-    players.close();
-
-    if (players.size() > 6 || players.size() < 2) {
+    if (players.size() < 2 || players.size() > 6){
         throw InvalidPlayersFileException();
     }
-    // Read players from the players stream
-//    while (getline(playersStream, line)) {
-//        istringstream iss(line);
-//        string name, job, character;
-//        iss >> name >> job >> character;
-//
-//        // Validate player attributes
-//        if (name.length() < 3 || name.length() > 15 ||
-//            (job != "Warrior" && job != "Magician" && job != "Archer") ||
-//            (character != "Responsible" && character != "RiskTaking")) {
-//            throw InvalidPlayersFileException();
-//        }
-//
-//        // Create job and character based on the string values
-//        std::shared_ptr<Jop> jobPtr;
-//        if (job == "Warrior") {
-//            jobPtr = make_shared<Warrior>();
-//        } else if (job == "Magician") {
-//            jobPtr = make_shared<Magician>();
-//        } else if (job == "Archer") {
-//            jobPtr = make_shared<Archer>();
-//        }
-//
-//        std::shared_ptr<Character> characterPtr;
-//        if (character == "Responsible") {
-//            characterPtr = make_shared<Responsible>();
-//        } else if (character == "RiskTaking") {
-//            characterPtr = make_shared<RiskTaking>();
-//        }
-//
-//        // Create a new player and add it to the players list
-//        shared_ptr<Player> player = make_shared<Player>(name, jobPtr, characterPtr);
-//        players.push_back(player);
-//    }
+
+
+
     this->m_turnIndex = 1; // Initialize turn index
 }
 
@@ -312,6 +401,7 @@ void MatamStory::playTurn(Player& player) {
      * 3. Play the event
      * 4. Print the turn outcome with "printTurnOutcome"
     */
+    ////////// anthor solition i can search for player in players with for and play it //////
 std::shared_ptr<Event> event = Events.front();
 Events.pop();
 Events.push(event);

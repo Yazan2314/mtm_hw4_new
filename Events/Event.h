@@ -1,5 +1,5 @@
-//#ifndef EVENT_H
-//#define EVENT_H
+#ifndef EVENT_H
+#define EVENT_H
     #pragma once
 
     #include "../Players/Player.h"
@@ -23,7 +23,7 @@
 
     class Encounter {
     public:
-        virtual ~Encounter();
+        virtual ~Encounter() = default;
         virtual string getDescription() = 0;
         virtual string getTupe() = 0;
         virtual int getcombatPower(){
@@ -45,7 +45,7 @@
         int loot;
         int damage;
     public:
-        Monsters(int force, int loot, int damage);
+//        Monsters(int force, int loot, int damage);
         void increaseCombatPower(){
             combatPower += 2;
         }
@@ -54,15 +54,16 @@
     ////////////////////////////////// Snail /////////////////////////////
     class Snail : public Monsters {
     public:
-//        Snail(){
-//            combatPower = 5;
-//            loot = 2;
-//            damage = 10;
-//        }
-Snail(): Monsters(5,2,10){}
-        string getTupe() override{
-            return "Snail";
-        }
+    Snail(){
+        combatPower = 5;
+        loot = 2;
+        damage = 10;
+    }
+    string getTupe(){
+        return "Snail";
+    }
+
+
         int getcombatPower() override {
             return combatPower;
         }
@@ -82,7 +83,7 @@ Snail(): Monsters(5,2,10){}
     ///////////////////////////////////// Slime /////////////////////////////////////////
     class Slime : public Monsters {
     public:
-        Slime(): Monsters(12,5,25){}
+//        Slime(): Monsters(12,5,25){}
 
         string getTupe() override{
             return "Slime";
@@ -102,20 +103,20 @@ Snail(): Monsters(5,2,10){}
         }
 
 
-//        Slime(){
-//            combatPower = 12;
-//            loot = 5;
-//            damage = 25;
-//        }
+        Slime(){
+            combatPower = 12;
+            loot = 5;
+            damage = 25;
+        }
     };
-    class Balrorg : public Monsters {
+    class Balrog : public Monsters {
     public:
-/*        Balrorg(){
+        Balrorg(){
             combatPower = 15;
             loot = 100;
             damage = 9001;
-        }*/
-        Balrorg(): Monsters(15,100,9001){}
+        }
+//        Balrog(): Monsters(15,100,9001){}
 
         string getTupe() override {
             return "Balrog";
@@ -139,29 +140,32 @@ Snail(): Monsters(5,2,10){}
     protected:
 
         size_t size;
-        std::vector<std::shared_ptr<Monsters>> monsters;
+//        std::vector<std::shared_ptr<Monsters>> monsters;
     public:
-        Pack(const std::vector<std::shared_ptr<Monsters>>& monsters)
-            : Monsters(0, 0, 0), size(monsters.size()), monsters(monsters) {
-
-                // Initialize combatPower, loot, and damage based on the monsters in the pack
-                for (const auto& monster : monsters) {
-                    combatPower += monster->getcombatPower();
-                    loot += monster->getloot();
-                    damage += monster->getdamage();
-                }
-            }
-
-//       Pack(vector <shared_ptr<Monsters>> & monsters , int size ) {
-//            combatPower = 0;
-//            loot = 0;
-//            damage = 0;
-//            this->size = size;
-//            for (auto &monster: monsters) {
-//                combatPower += monster->getcombatPower();
-//                loot += monster->getloot();
-//                damage += monster->getdamage();
+//        Pack(const std::vector<std::shared_ptr<Monsters>>& monsters)
+//            : Monsters(0, 0, 0), size(monsters.size()), monsters(monsters) {
+//
+//                // Initialize combatPower, loot, and damage based on the monsters in the pack
+//                for (const auto& monster : monsters) {
+//                    combatPower += monster->getcombatPower();
+//                    loot += monster->getloot();
+//                    damage += monster->getdamage();
+//                }
 //            }
+
+       Pack(vector <shared_ptr<Monsters>> & monsters , int size ) {
+            combatPower = 0;
+            loot = 0;
+            damage = 0;
+            this->size = size;
+            for (auto &monster: monsters) {
+                combatPower += monster->getcombatPower();
+                loot += monster->getloot();
+                damage += monster->getdamage();
+            }
+        }
+//        std::vector<std::shared_ptr<Monsters>> getMonsters() const {
+//            return monsters;
 //        }
 
                 string getTupe() override {
@@ -215,16 +219,20 @@ public:
      *
      * @return - the description of the event
     */
+
+
+    Event(const shared_ptr<Encounter>& encounter1){
+        this->Tupe = encounter1->getTupe();
+        this->encounter = encounter1;
+    }
+
     string getDescription() const {
         return encounter->getDescription();
     }
     string getTupe() {
         return Tupe;
     }
-    Event(const shared_ptr<Encounter>& encounter1){
-        this->Tupe = encounter1->getTupe();
-        this->encounter = encounter1;
-    }
+
     shared_ptr<Encounter> getEncounter(){
         return encounter;
     }
@@ -234,4 +242,4 @@ public:
 
 };
 
-//#endif // EVENT_H
+#endif // EVENT_H

@@ -1,6 +1,6 @@
 #include "Player.h"
-
-Player::Player(std::string& name1, std::shared_ptr<Jop> &job1, std::shared_ptr<Character> &character1)
+#include "exception"
+Player::Player(std::string& name1, std::shared_ptr<Jop> &job1, std::shared_ptr<Character> &character1) :name(std::move(name1))
 {
     this->name = name1;
     this->job = job1;
@@ -23,7 +23,7 @@ Player::Player(std::string& name1, std::shared_ptr<Jop> &job1, std::shared_ptr<C
 }
 
 string Player::getDescription() const {
-    return name + ", " + this->job->getJob() + " with " + this->character->getBehavior()
+    return name + ", " + this->job->getJob() + " with " + this->character->getCharacter()
     + " character" + "(level " +std::to_string(level) +", force" + std::to_string(Force)  +")";
 }
 
@@ -64,7 +64,7 @@ void Player::updateForce() {
 
 int Player::payhealth() {
     int amount = 0;
-    if (character->getBehavior() == "Responsible"){
+    if (character->getCharacter() == "Responsible"){
         while (current_HP < 100 && coins >= 5){
             coins -= 5;
             current_HP += 10;
@@ -85,10 +85,10 @@ int Player::payhealth() {
 string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
     std::string clashking = clash->getTupe();
     std::string jobTupe = job->getJob();
-    std::string charecterTupe = character->getBehavior();
+    std::string charecterTupe = character->getCharacter();
 
     int combatpower = getCompetPower();
-    if (clashking == "Snail" || clashking == "Slime" || clashking == "Balrorg" || clashking == "Pack") {
+    if (clashking == "Snail" || clashking == "Slime" || clashking == "Balrog" || clashking == "Pack") {
 
         if (combatpower > clash->getcombatPower()) {
             level++;
@@ -98,32 +98,81 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                 current_HP = std::max(0, current_HP);
             }
 
-            if (clashking == "Balrorg" ) {
-                auto balrog = std::dynamic_pointer_cast<Balrorg>(clash); // Dynamic cast
-                if (balrog) {
-                    balrog->increaseCombatPower();
-                }
-            }
-                return "Won";
-            } else {
-                current_HP -= clash->getdamage();
-                current_HP = std::max(0, current_HP);
-            if (clashking == "Balrorg") {
-                auto balrog = std::dynamic_pointer_cast<Balrorg>(clash); // Dynamic cast
-                if (balrog) {
-                    balrog->increaseCombatPower();
-                }
-            }
-                return "Lost";
-            }
-        } else if (clashking == "SolarEclips") {
-            int prev = Force;
-            updateForce();
-            return std::to_string(Force - prev);
 
-        } else if (clashking == "PotionsMerchant") {
-            int amount = payhealth();
-            return std::to_string(amount);
+            if (clashking == "Balrog") {
+                auto balrog = std::dynamic_pointer_cast<Balrog>(clash); // Dynamic cast
+                if (balrog) {
+                    balrog->increaseCombatPower();
+                }
+            }
+            if (clashking == "Pack") {
+                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
+                if (pack) {
+                    for (const auto &monster: pack->getMonsters()) {
+                        if (monster->getTupe() == "Balrog") {
+                            auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
+                            if (balrog) {
+                                balrog->increaseCombatPower();
+                            }
+                        }
+                    }
+                }
+            }
+            return "Won";
+        } else {
+            current_HP -= clash->getdamage();
+            current_HP = std::max(0, current_HP);
+            if (clashking == "Balrog") {
+                auto balrog = std::dynamic_pointer_cast<Balrog>(clash); // Dynamic cast
+                if (balrog) {
+                    balrog->increaseCombatPower();
+                }
+            }
+            if (clashking == "Pack") {
+                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
+                if (pack) {
+                    for (const auto &monster: pack->getMonsters()) {
+                        if (monster->getTupe() == "Balrog") {
+                            auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
+                            if (balrog) {
+                                balrog->increaseCombatPower();
+                            }
+                        }
+                    }
+                }
+            }
+            return "Lost";
         }
-        return "";
+    } else if (clashking == "SolarEclips") {
+        int prev = Force;
+        updateForce();
+        return std::to_string(Force - prev);
+
+    } else if (clashking == "PotionsMerchant") {
+        int amount = payhealth();
+        return std::to_string(amount);
     }
+    return "";
+
+}
+
+std::shared_ptr<Jop> Player::createJob(const std::string& jobType) {
+    if (jobType == "Warrior") {
+        return std::make_shared<Warrior>();
+    } else if (jobType == "Archer") {
+        return std::make_shared<Archer>();
+    } else if (jobType == "Magician") {
+        return std::make_shared<Magician>();
+    }
+    throw std::invalid_argument("Invalid job type");
+}
+
+// Factory method for creating characters
+std::shared_ptr<Character> Player::createCharacter(const std::string& characterType) {
+    if (characterType == "Responsible") {
+        return std::make_shared<Responsible>();
+    } else if (characterType == "RiskTaking") {
+        return std::make_shared<RiskTaking>();
+    }
+    throw std::invalid_argument("Invalid character type");
+}

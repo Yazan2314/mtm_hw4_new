@@ -34,16 +34,16 @@ class Encounter;
 
 class Character {
 public:
-    virtual string getBehavior()=0;
+    virtual string getCharacter()=0;
 };
 
 class Responsible : public Character {
-    string getBehavior() override {
+    string getCharacter() override {
         return "Responsible";
     }
 };
 class RiskTaking : public Character {
-    string getBehavior() override{
+    string getCharacter() override{
         return "RiskTaking";
     }
 };
@@ -142,6 +142,18 @@ public:
 
     int payhealth();
     string playEncounter(const std::shared_ptr<Encounter>& clash);
+
+private:
+    /**
+  * Factory method for creating jobs
+  */
+    static std::shared_ptr<Jop> createJob(const std::string& jobType);
+
+    /**
+     * Factory method for creating characters
+     */
+    static std::shared_ptr<Character> createCharacter(const std::string& characterType);
+
 };
 
 
