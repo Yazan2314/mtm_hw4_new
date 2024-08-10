@@ -25,7 +25,7 @@
     public:
 //        virtual ~Encounter() = default;
         virtual string getDescription() = 0;
-        virtual string getTupe() = 0;
+        virtual string getType() = 0;
         virtual int getcombatPower(){
             return 0;
         }
@@ -59,7 +59,8 @@
         loot = 2;
         damage = 10;
     }
-    string getTupe() override{
+//Snail() : Monsters(5,2,10){}
+    string getType() override{
         return "Snail";
     }
 
@@ -74,7 +75,7 @@
             return damage;
         }
         string getDescription() override {
-            return getTupe() + " (power " + std::to_string( getcombatPower())
+            return getType() + " (power " + std::to_string( getcombatPower())
             + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
@@ -85,7 +86,7 @@
     public:
 
 
-        string getTupe() override{
+        string getType() override{
             return "Slime";
         }
         int getcombatPower() override {
@@ -98,7 +99,7 @@
             return damage;
         }
         string getDescription() override {
-            return getTupe() + " (power " + std::to_string( getcombatPower())
+            return getType() + " (power " + std::to_string( getcombatPower())
                    + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
@@ -118,7 +119,7 @@
         }
 
 
-        string getTupe() override {
+        string getType() override {
             return "Balrog";
         }
         int getcombatPower() override {
@@ -131,7 +132,7 @@
             return damage;
         }
         string getDescription() override {
-            return getTupe() + " (power " + std::to_string( getcombatPower())
+            return getType() + " (power " + std::to_string( getcombatPower())
                    + ", loot " + std::to_string(getloot()) + ", damage " + std::to_string(getdamage()) + ")";
         }
 
@@ -168,7 +169,7 @@
             return monsters;
         }
 
-                string getTupe() override {
+                string getType() override {
             return "Pack";
         }
         int getcombatPower() override {
@@ -193,7 +194,7 @@
     };
 
     class SolarEclipse : public SpecialEvent  {
-        string getTupe() override {
+        string getType() override {
             return "SolarEclipse";
         }
         string getDescription() override{
@@ -202,7 +203,7 @@
 
     };
     class PotionsMerchant : public SpecialEvent {
-        string getTupe() override {
+        string getType() override {
             return "PotionsMerchant";
         }
         string getDescription() override{
@@ -211,7 +212,7 @@
     };
     class Event {
 protected:
-    string Tupe;
+    string Type;
     shared_ptr<Encounter> encounter;
 public:
     /**
@@ -222,15 +223,15 @@ public:
 
 
     Event(const shared_ptr<Encounter>& encounter1){
-        this->Tupe = encounter1->getTupe();
+        this->Type = encounter1->getType();
         this->encounter = encounter1;
     }
 
     string getDescription() const {
         return encounter->getDescription();
     }
-    string getTupe() {
-        return Tupe;
+    string getType() {
+        return Type;
     }
 
     shared_ptr<Encounter> getEncounter(){

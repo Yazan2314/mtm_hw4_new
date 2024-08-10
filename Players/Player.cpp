@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "exception"
+
 Player::Player(std::string& name1, std::shared_ptr<Jop>& job1, std::shared_ptr<Character>& character1)
 {
     this->name = name1;
@@ -83,7 +83,7 @@ int Player::payhealth() {
 
 ///////////////////////// if the monster is balrog we need to increa the competpower by 2 for each round" //////
 string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
-    std::string clashking = clash->getTupe();
+    std::string clashking = clash->getType();
     std::string jobTupe = job->getJob();
     std::string  strategy = job->getstrategy();
     std::string charecterTupe = character->getCharacter();
@@ -111,7 +111,7 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                 auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
                 if (pack) {
                     for (const auto &monster: pack->getMonsters()) {
-                        if (monster->getTupe() == "Balrog") {
+                        if (monster->getType() == "Balrog") {
                             auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
                             if (balrog) {
                                 balrog->increaseCombatPower();
@@ -134,7 +134,7 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                 auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
                 if (pack) {
                     for (const auto &monster: pack->getMonsters()) {
-                        if (monster->getTupe() == "Balrog") {
+                        if (monster->getType() == "Balrog") {
                             auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
                             if (balrog) {
                                 balrog->increaseCombatPower();
@@ -158,7 +158,7 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                 auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
                 if (pack) {
                     for (const auto &monster: pack->getMonsters()) {
-                        if (monster->getTupe() == "Balrog") {
+                        if (monster->getType() == "Balrog") {
                             auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
                             if (balrog) {
                                 balrog->increaseCombatPower();

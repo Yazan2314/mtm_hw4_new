@@ -10,8 +10,13 @@
 #include <memory>
 #include <cctype>
 
+
+
 using std::make_shared;
 using namespace std;
+
+
+
 
 class InvalidPlayersFileException : public std::exception {
 public:
@@ -27,6 +32,21 @@ public:
     }
 };
 
+bool compare_players(const shared_ptr<Player>& player1 , const shared_ptr<Player>& player2 );
+bool cheack_Player(const std::string& line);
+std::string readNextWord(std::istringstream& stream);
+int readCount(std::istringstream& stream);
+std::vector<std::string> parsePackEvents(std::istringstream& stream, int count);
+std::vector<std::string> getevent2(std::istringstream& eventstream);
+vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start);
+int MatamStory::packAux(std::istream& eventsStream, std::string word, std::vector<std::shared_ptr<Encounter>>& g,
+                        unsigned int counter, unsigned int pack_num);
+void MatamStory::makePackEvent(std::string name, std::vector<std::shared_ptr<Encounter>>& e);
+
+
+
+
+
 
 bool compare_players(const shared_ptr<Player>& player1 , const shared_ptr<Player>& player2 ){
     if (player1->getLevel() > player2->getLevel()) return true;
@@ -40,52 +60,52 @@ bool compare_players(const shared_ptr<Player>& player1 , const shared_ptr<Player
     return player1->getName() < player2->getName();
 }
 
-bool check_pack_recursive(vector<string>& pack, size_t& index) {
-    int count = 0;
-    for (index = 2; index <pack.size() ; ++index) {
+//bool check_pack_recursive(vector<string>& pack, size_t& index) {
+//    int count = 0;
+//    for (index = 2; index <pack.size() ; ++index) {
+//
+//        if (pack[index] != "Snail" && pack[index] != "Slime" && pack[index] != "Balrog" && pack[index] != "Pack"){
+//            return false;
+//        }
+//        count++;
+//    }
+//    if (count != stoi(pack[1])){
+//        return false;
+//    }
+//    index = 2; // Reset index for nested pack checking
+//    for (size_t i = 2; i < pack.size(); ++i) {
+//        if (pack[i] == "Pack") {
+//            size_t nestedIndex = i + 1; // Set the starting point for the nested pack
+//            if (!check_pack_recursive(pack, nestedIndex)) {
+//                return false; // Invalid nested pack
+//            }
+//            // Move the outer index to skip over the nested pack
+//            index = nestedIndex; // Update the index to the position after the nested pack
+//        }
+//    }
+//
+//
+//    return true;
+//}
 
-        if (pack[index] != "Snail" && pack[index] != "Slime" && pack[index] != "Balrog" && pack[index] != "Pack"){
-            return false;
-        }
-        count++;
-    }
-    if (count != stoi(pack[1])){
-        return false;
-    }
-    index = 2; // Reset index for nested pack checking
-    for (size_t i = 2; i < pack.size(); ++i) {
-        if (pack[i] == "Pack") {
-            size_t nestedIndex = i + 1; // Set the starting point for the nested pack
-            if (!check_pack_recursive(pack, nestedIndex)) {
-                return false; // Invalid nested pack
-            }
-            // Move the outer index to skip over the nested pack
-            index = nestedIndex; // Update the index to the position after the nested pack
-        }
-    }
+//bool checkevent(vector<string>& encounter){
+//    if(encounter.size() < 1){
+//        return false;
+//    }
+//    if(encounter[0] != "Snail" && encounter[0] != "Slime" &&
+//    encounter[0] != "Balrog" && encounter[0] != "Pack" && encounter[0] != "SolarEclipse" && encounter[0] != "PotionsMerchant"){
+//        return false;
+//    }
+//    if (encounter[0] != "Pack" && encounter.size() > 1){
+//        return false;
+//    }
+//    if (encounter[0] == "Pack"  ){
+//        size_t index = 2; // Start checking from the third element
+//        return check_pack_recursive(encounter, index); // Check for valid pack
+//    }
+//    return true;
+//}
 
-
-    return true;
-}
-
-bool checkevent(vector<string>& encounter){
-    if(encounter.size() < 1){
-        return false;
-    }
-    if(encounter[0] != "Snail" && encounter[0] != "Slime" &&
-    encounter[0] != "Balrog" && encounter[0] != "Pack" && encounter[0] != "SolarEclipse" && encounter[0] != "PotionsMerchant"){
-        return false;
-    }
-    if (encounter[0] != "Pack" && encounter.size() > 1){
-        return false;
-    }
-    if (encounter[0] == "Pack"  ){
-        size_t index = 2; // Start checking from the third element
-        return check_pack_recursive(encounter, index); // Check for valid pack
-    }
-    return true;
-
-}
 bool cheack_Player(const std::string& line){
     std::istringstream iss(line);
     std::vector<std::string > playerdata;
@@ -140,141 +160,169 @@ bool check_player_valid(const vector<string>& playerData) {
 
 
 
-vector<string> getevent(const string& line) {
-    vector<string> event;
-    istringstream iss(line);
-    string temp;
-
-    while (iss >> temp) {
-        event.push_back(temp);
-    }
-
-    return event;
-}
-vector<string> getEventData(std::istringstream& iss) {
-    std::vector<std::string> eventData;
-    std::string token;
-    while (iss >> token) {
-        eventData.push_back(token);
-    }
-    return eventData;
-}
 
 
 
-vector<string> getEvent (string line)
-{
-    vector<string> event;
-    string tmp="";
-    size_t i=0;
-    while(i < line.size())
-    {
-        if(line[i] != ' ')
-        {
-            tmp += line[i];
+
+
+
+
+
+//
+//vector<string> getevent3(istringstream& eventstream);
+//
+//
+//vector<string> getevent2(istringstream& eventstram) {
+//    vector<string> event;
+//    string event_type;
+//    eventstram >> event_type;
+//    if (eventstram.fail()) {
+//        throw InvalidEventsFileException();
+//    }
+//    if (event_type == "Snail" || event_type == "Slime" || event_type == "Balrog" || event_type == "SolarEclipse"  || event_type == "PotionsMerchant") {
+//        event.push_back(event_type);
+//        return event;
+//    }
+//    if (event_type != "Pack") {
+//        throw InvalidEventsFileException();
+//    }
+//    event.push_back(event_type); // should be pack
+//    int count;
+//    std::string input;
+//
+//    if (!(eventstram >> input)) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    try {
+//        count = std::stoi(input);
+//    } catch (const std::invalid_argument& e) {
+//        throw InvalidEventsFileException();
+//    } catch (const std::out_of_range& e) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    if (count <= 1) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    event.push_back(std::to_string(count));
+//
+//    for (int i = 0; i < count; i++) {
+//        std::vector<string> monsterencounter = getevent3(eventstram);
+//        for (const string& s : monsterencounter) {
+//            event.push_back(s);
+//        }
+//    }
+//
+//    return event;
+//}
+//
+//vector<string> getevent3(istringstream& eventstream) {
+//    vector<string> event;
+//    string name;
+//    eventstream >> name;
+//
+//    if (eventstream.fail()) {
+//        throw InvalidEventsFileException();
+//    }
+//    if (name == "Snail" || name == "Balrog" || name == "Slime") {
+//        event.push_back(name);
+//        return event;
+//    }
+//
+//    if (name != "Pack") {
+//        throw InvalidEventsFileException();
+//    }
+//    event.push_back(name); // should be pack
+//    int count;
+//    std::string input;
+//
+//    if (!(eventstream >> input)) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    try {
+//        count = std::stoi(input);
+//    } catch (const std::invalid_argument& e) {
+//        throw InvalidEventsFileException();
+//    } catch (const std::out_of_range& e) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    if (count <= 1) {
+//        throw InvalidEventsFileException();
+//    }
+//
+//    event.push_back(std::to_string(count));
+//
+//    for (int i = 0; i < count; i++) {
+//        std::vector<string> monsterencounter = getevent3(eventstream);
+//        for (const string& s : monsterencounter) {
+//            event.push_back(s);
+//        }
+//    }
+//
+//    return event;
+//}
+
+
+
+
+
+
+
+std::string readNextWord(std::istringstream& stream) {
+    std::string word;
+
+    while (true) {
+        stream >> std::ws; // Ignore leading whitespace and newlines
+        if (stream >> word) { // Attempt to read the next word
+            return word; // Return the valid word
         }
-        else {
-            event.push_back(tmp);
-            tmp = "";
-        }
-        i++;
+        // If the read fails, we loop back to skip additional whitespace
     }
-    if(tmp != "")
-        event.push_back(tmp);
-    return event;
 }
 
-vector<string> checakspacess(string line) {
-    vector<string> player;
-    string tmp = "";
-    size_t i = 0;
-    while(i < line.size()) {
-        if(line[i] != ' ')
-        {
-            tmp += line[i];
-        }else {
-            player.push_back(tmp);
-            tmp = "";
-        }
-        i++;
-    }
-    if(tmp != "")
-        player.push_back(tmp);
-    return player;
-}
-
-
-
-
-vector<string> getevent3(istringstream& eventstream);
-
-
-vector<string> getevent2(istringstream& eventstram) {
-    vector<string> event;
-    string name;
-    eventstram >> name;
-    if (eventstram.fail()) {
-        throw InvalidEventsFileException();
-    }
-    if (name == "Snail" || name == "Slime" || name == "Balrog" || name == "SolarEclipse"  || name == "PotionsMerchant") {
-        event.push_back(name);
-        return event;
-    }
-    if (name != "Pack") {
-        throw InvalidEventsFileException();
-    }
-    event.push_back(name); // should be pack
+// Function to read a count and ensure it's valid
+int readCount(std::istringstream& stream) {
+    std::string countStr = readNextWord(stream);
     int count;
-    std::string input;
-
-    if (!(eventstram >> input)) {
-        throw InvalidEventsFileException();
-    }
 
     try {
-        count = std::stoi(input);
-    } catch (const std::invalid_argument& e) {
-        throw InvalidEventsFileException();
-    } catch (const std::out_of_range& e) {
-        throw InvalidEventsFileException();
+        count = std::stoi(countStr); // Convert count to integer
+    } catch (const std::invalid_argument&) {
+        throw InvalidEventsFileException(); // Handle conversion error
+    } catch (const std::out_of_range&) {
+        throw InvalidEventsFileException(); // Handle out of range error
     }
 
     if (count <= 1) {
         throw InvalidEventsFileException();
     }
 
-    event.push_back(std::to_string(count));
-
-    for (int i = 0; i < count; i++) {
-        std::vector<string> monsterencounter = getevent3(eventstram);
-        for (const string& s : monsterencounter) {
-            event.push_back(s);
-        }
-    }
-
-    return event;
+    return count;
 }
 
-vector<string> getevent3(istringstream& eventstream) {
-    vector<string> event;
-    string name;
-    eventstream >> name;
 
-    if (eventstream.fail()) {
-        throw InvalidEventsFileException();
-    }
-    if (name == "Snail" || name == "Balrog" || name == "Slime") {
-        event.push_back(name);
+
+
+std::vector<std::string> getevent2(std::istringstream& eventstream) {
+    std::vector<std::string> event;
+    std::string event_type = readNextWord(eventstream); // Read event type
+
+    if (event_type == "Snail" || event_type == "Slime" || event_type == "Balrog" || event_type == "SolarEclipse" || event_type == "PotionsMerchant") {
+        event.push_back(event_type);
         return event;
     }
 
-    if (name != "Pack") {
+    if (event_type != "Pack") {
         throw InvalidEventsFileException();
     }
-    event.push_back(name); // should be pack
-    int count;
-    std::string input;
 
+    event.push_back(event_type); // should be Pack
+int count;
+std::string input;
     if (!(eventstream >> input)) {
         throw InvalidEventsFileException();
     }
@@ -288,29 +336,20 @@ vector<string> getevent3(istringstream& eventstream) {
     }
 
     if (count <= 1) {
-        throw InvalidEventsFileException();
+        throw InvalidCardsFile();
     }
 
-    event.push_back(std::to_string(count));
+    card.push_back(std::to_string(count));
 
     for (int i = 0; i < count; i++) {
-        std::vector<string> monsterencounter = getevent3(eventstream);
-        for (const string& s : monsterencounter) {
-            event.push_back(s);
+        std::vector<std::string> monstercards = getCard3(deck);
+        for (const std::string& s : monstercards) {
+            card.push_back(s);
         }
     }
 
     return event;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -390,11 +429,115 @@ vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start) {
 //    return event;
 //}
 //
+bool isEvent(std::string name) const
+{
+    if (name == "PotionsMerchant")
+    {
+        return true;
+    }
+    if (name == "Snail")
+    {
+        return true;
+    }
+    if (name == "Slime")
+    {
+        return true;
+    }
+    if (name == "Balrog")
+    {
+        return true;
+    }
+    if (name == "SolarEclipse")
+    {
+        return true;
+    }
+    if (name == "Pack")
+    {
+        return true;
+    }
+    return false;
+}
+int MatamStory::packAux(std::istream& eventsStream, std::string word, std::vector<std::shared_ptr<Encounter>>& g,unsigned int counter, unsigned int pack_num){
+    word = "";
+    eventsStream >> word;
+    for (unsigned int i = 0; i < word.size(); i++)
+    {
+        if (!isdigit(word[i]))
+        {
+            throw InvalidEventsFileException();
+        }
+    }
+    unsigned int size_of_vector = std::stoi(word);
+    if (size_of_vector < 2)
+    {
+        throw InvalidEventsFileException();
+    }
+    std::vector<int> helper;
+    counter += size_of_vector;
+    pack_num++;
+    while (eventsStream >> word){
+        if (!isEvent(word) || word == "PotionsMerchant" || word == "SolarEclipse")
+        {
+            throw EventsFileInvalid();
+        }
+        if (word != "Pack")
+        {
+            makePackEvent(word, g);
+            helper.push_back(1);
+        }
+        else
+        {
+            if (word == "Pack")
+            {
+                packAux(eventsStream, word, g, counter, pack_num);
+                helper.push_back(1);
+            }
+        }
+        if (helper.size() >= size_of_vector)
+        {
+            break;
+        }
+    }
+    if (helper.size() != size_of_vector)
+    {
+        throw InvalidEventsFileException();
+    }
+    return size_of_vector;
+}
+
+void MatamStory::makePackEvent(std::string name, std::vector<std::shared_ptr<Encounter>>& e)
+{
+    shared_ptr<Encounter> inthepack;
+    if (name == "Snail")
+    {
+        inthepack = make_shared<Snail>();
+    }
+    if (name == "Slime")
+    {
+        inthepack = make_shared<Slime>();
+    }
+    if (name == "Balrog")
+    {
+        inthepack = make_shared<Balrog>();
+
+    }
+    e.push_back(inthepack);
+}
 
 MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) {
     index = 0;
     string line;
-    while(getline(eventsStream,line)){
+    while (getline(eventsStream, line)) {
+        // Trim leading and trailing whitespace (including newlines)
+        line.erase(0, line.find_first_not_of(" \t\n\r\f\v"));
+        line.erase(line.find_last_not_of(" \t\n\r\f\v") + 1);
+
+        // Skip empty lines
+        if (line.empty()) {
+            continue;
+        }
+//    string line;
+//    while(getline(eventsStream,line)){
 
             std::istringstream eventStream(line);
             vector<string> event = getevent2(eventStream);
@@ -427,8 +570,18 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
     }
 
 ////// todo: read players from the stream
-string line1;
-    while(getline(playersStream,line1)) {
+
+    string line1;
+    while (getline(playersStream, line1)) {
+        // Trim leading and trailing whitespace (including newlines)
+        line1.erase(0, line1.find_first_not_of(" \t\n\r\f\v"));
+        line1.erase(line1.find_last_not_of(" \t\n\r\f\v") + 1);
+
+        // Skip empty lines
+        if (line1.empty()) {
+            continue;
+        }
+
         if (!cheack_Player(line1)) {
             throw InvalidPlayersFileException();
         }
@@ -494,21 +647,22 @@ void MatamStory::playTurn(Player& player) {
     */
     ////////// anthor solition i can search for player in players with for and play it //////
 std::shared_ptr<Event> event = Events.front();
-Events.pop();
-Events.push(event);
+
     printTurnDetails(m_turnIndex,*players[index],*event);
     string result = (*players[index]).playEncounter(event->getEncounter());
     if(result == "win"){
        result = getEncounterWonMessage(*players[index],event->getEncounter()->getloot());
     }else if (result == "Lost"){
       result =   getEncounterLostMessage(*players[index] , event->getEncounter()->getdamage());
-    } else if (event->getEncounter()->getTupe() == "SolarEclipse"){
+    } else if (event->getEncounter()->getType() == "SolarEclipse"){
        result = getSolarEclipseMessage(*players[index], stoi(result));
-    } else if (event->getEncounter()->getTupe() == "PotionsMerchant") {
+    } else if (event->getEncounter()->getType() == "PotionsMerchant") {
         result = getPotionsPurchaseMessage(*players[index] , stoi(result));
     }
     printTurnOutcome(result);
     m_turnIndex++;
+    Events.pop();
+    Events.push(event);
 }
 
 void MatamStory::playRound() {

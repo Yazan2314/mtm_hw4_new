@@ -5,7 +5,7 @@
 #include <string>
 #include "memory"
 #include "algorithm"
-#include "./Events/Event.h"
+#include "../Events/Event.h"
 using std::string;
 
 class Encounter;
