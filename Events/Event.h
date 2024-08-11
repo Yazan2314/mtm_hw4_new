@@ -154,7 +154,7 @@
 //                }
 //            }
 
-       Pack(vector <shared_ptr<Monsters>> & monsters , int size ) {
+       Pack( vector <shared_ptr<Monsters>> & monsters , int size ) {
             combatPower = 0;
             loot = 0;
             damage = 0;

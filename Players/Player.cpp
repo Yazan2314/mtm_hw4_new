@@ -121,29 +121,6 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                 }
             }
             return "win";
-        } else if (strategy == "CloseFighter" && clash->getdamage() < 10) {
-         current_HP -= 10;
-         current_HP = std::max(0,current_HP);
-            if (clashking == "Balrog") {
-                auto balrog = std::dynamic_pointer_cast<Balrog>(clash); // Dynamic cast
-                if (balrog) {
-                    balrog->increaseCombatPower();
-                }
-            }
-            if (clashking == "Pack") {
-                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
-                if (pack) {
-                    for (const auto &monster: pack->getMonsters()) {
-                        if (monster->getType() == "Balrog") {
-                            auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
-                            if (balrog) {
-                                balrog->increaseCombatPower();
-                            }
-                        }
-                    }
-                }
-            }
-            return "lost";
 
         } else {
             current_HP -= clash->getdamage();
