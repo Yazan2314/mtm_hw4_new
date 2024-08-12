@@ -107,16 +107,22 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                     balrog->increaseCombatPower();
                 }
             }
+
             if (clashking == "Pack") {
-                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
+                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast to Pack
                 if (pack) {
-                    for (const auto &monster: pack->getMonsters()) {
+                    int balrogCount = 0;
+
+                    // Count the number of Balrog monsters in the pack
+                    for (const auto &monster : pack->getMonsters()) {
                         if (monster->getType() == "Balrog") {
-                            auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
-                            if (balrog) {
-                                balrog->increaseCombatPower();
-                            }
+                            ++balrogCount;
                         }
+                    }
+
+                    // Increase the combat power of the Pack based on the number of Balrogs
+                    if (balrogCount > 0) {
+                        pack->increaseCombatPower( balrogCount );
                     }
                 }
             }
@@ -131,16 +137,22 @@ string Player::playEncounter(const std::shared_ptr<Encounter>& clash) {
                     balrog->increaseCombatPower();
                 }
             }
+
             if (clashking == "Pack") {
-                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast
+                auto pack = std::dynamic_pointer_cast<Pack>(clash); // Dynamic cast to Pack
                 if (pack) {
-                    for (const auto &monster: pack->getMonsters()) {
+                    int balrogCount = 0;
+
+                    // Count the number of Balrog monsters in the pack
+                    for (const auto &monster : pack->getMonsters()) {
                         if (monster->getType() == "Balrog") {
-                            auto balrog = std::dynamic_pointer_cast<Balrog>(monster); // Dynamic cast
-                            if (balrog) {
-                                balrog->increaseCombatPower();
-                            }
+                            ++balrogCount;
                         }
+                    }
+
+                    // Increase the combat power of the Pack based on the number of Balrogs
+                    if (balrogCount > 0) {
+                        pack->increaseCombatPower( balrogCount);
                     }
                 }
             }

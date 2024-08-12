@@ -46,8 +46,11 @@
         int damage;
     public:
 //        Monsters(int force, int loot, int damage);
-        void increaseCombatPower(){
-            combatPower += 2;
+//        void increaseCombatPower(int num = 1 ){
+//            combatPower += (num * 2);
+//        }
+        virtual void increaseCombatPower(int num = 1) {
+            combatPower += (num * 2);
         }
 
     };
@@ -143,18 +146,11 @@
         size_t size;
         std::vector<std::shared_ptr<Monsters>> monsters;
     public:
-//        Pack(const std::vector<std::shared_ptr<Monsters>>& monsters)
-//            : Monsters(0, 0, 0), size(monsters.size()), monsters(monsters) {
-//
-//                // Initialize combatPower, loot, and damage based on the monsters in the pack
-//                for (const auto& monster : monsters) {
-//                    combatPower += monster->getcombatPower();
-//                    loot += monster->getloot();
-//                    damage += monster->getdamage();
-//                }
-//            }
 
-       Pack( vector <shared_ptr<Monsters>> & monsters , int size ) {
+
+       Pack( vector <shared_ptr<Monsters>> & monsters , int size )
+       : size(size),monsters(monsters)
+       {
             combatPower = 0;
             loot = 0;
             damage = 0;
@@ -167,6 +163,10 @@
         }
         std::vector<std::shared_ptr<Monsters>> getMonsters() const {
             return monsters;
+        }
+        void increaseCombatPower(int num = 1) override {
+
+            combatPower += ( 2 * num);
         }
 
                 string getType() override {
