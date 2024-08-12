@@ -74,13 +74,17 @@ bool checkevent(vector<string>& encounter){
     return true;
 }
 
-bool cheack_Player(const std::string& line){
-    std::istringstream iss(line);
-    std::vector<std::string > playerdata;
-    std::string word;
-    while(iss >> word){
-        playerdata.push_back(word);
-    }
+bool cheack_Player(const std::string& name , std::string& jop , std::string& character){
+//    std::istringstream iss(line);
+//    std::vector<std::string > playerdata;
+//    std::string word;
+//    while(iss >> word){
+//        playerdata.push_back(word);
+//    }
+std::vector<std::string > playerdata;
+playerdata.push_back(name);
+playerdata.push_back(jop);
+playerdata.push_back(character);
     if (playerdata.size() != 3){
         return false;
     }
@@ -283,26 +287,30 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
     }
 
 
-////// todo: read players from the stream
 
-    string line1;
-    while (getline(playersStream, line1)) {
-        // Trim leading and trailing whitespace (including newlines)
-        line1.erase(0, line1.find_first_not_of(" \t\n\r\f\v"));
-        line1.erase(line1.find_last_not_of(" \t\n\r\f\v") + 1);
+//    string line1;
+//    while (getline(playersStream, line1)) {
+//        // Trim leading and trailing whitespace (including newlines)
+//        line1.erase(0, line1.find_first_not_of(" \t\n\r\f\v"));
+//        line1.erase(line1.find_last_not_of(" \t\n\r\f\v") + 1);
+//
+//        // Skip empty lines
+//        if (line1.empty()) {
+//            continue;
+//        }
+//
+//        if (!cheack_Player(line1)) {
+//            throw InvalidPlayersFileException();
+//        }
+//
+//        std::istringstream iss(line1);
+    string name, job, character;
+while(playersStream >> name >> job >> character){
 
-        // Skip empty lines
-        if (line1.empty()) {
-            continue;
-        }
-
-        if (!cheack_Player(line1)) {
-            throw InvalidPlayersFileException();
-        }
-
-        std::istringstream iss(line1);
-        string name, job, character;
-        if (!(iss >> name >> job >> character)) {
+//        if (!(iss >> name >> job >> character)) {
+//            throw InvalidPlayersFileException();
+//        }
+    if (!cheack_Player(name , job ,character)) {
             throw InvalidPlayersFileException();
         }
 
@@ -342,13 +350,9 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
     /*==========================================*/
 
 
-    /*===== TODO: Open and Read players file =====*/
-
-    /*============================================*/
 
 
-//    this->m_turnIndex = 1;
-//}
+
 
 void MatamStory::playTurn(Player& player) {
 
