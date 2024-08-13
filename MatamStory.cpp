@@ -284,8 +284,11 @@ MatamStory::MatamStory(std::istream& eventsStream, std::istream& playersStream) 
 
         std::shared_ptr<Event> newEvent = std::make_shared<Event>(encounter);
         this->Events.push(newEvent);
-    }
 
+    }
+    if (Events.size() < 2){
+        throw InvalidEventsFileException();
+    }
 
 
 //    string line1;
