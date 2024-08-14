@@ -8,7 +8,7 @@
 #include <string>
 #include <algorithm>
 #include <memory>
-#include <cctype>
+
 
 
 
@@ -74,13 +74,8 @@ bool checkevent(vector<string>& encounter){
     return true;
 }
 
-bool cheack_Player(const std::string& name , std::string& jop , std::string& character){
-//    std::istringstream iss(line);
-//    std::vector<std::string > playerdata;
-//    std::string word;
-//    while(iss >> word){
-//        playerdata.push_back(word);
-//    }
+bool cheack_Player(const std::string& name ,const std::string& jop ,const std::string& character){
+
 std::vector<std::string > playerdata;
 playerdata.push_back(name);
 playerdata.push_back(jop);
@@ -136,7 +131,7 @@ bool check_player_valid(const vector<string>& playerData) {
 
 
 
-vector<shared_ptr<Monsters>> getMonsters(vector<string>& event, int &start) {
+vector<shared_ptr<Monsters>> getMonsters(const vector<string>& event, int &start) {
     vector<shared_ptr<Monsters>> monsters;
     size_t size = stoi(event[start]);
     size_t i = start + 1;

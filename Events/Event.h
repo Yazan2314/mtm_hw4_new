@@ -49,6 +49,7 @@
 //        void increaseCombatPower(int num = 1 ){
 //            combatPower += (num * 2);
 //        }
+virtual ~Monsters() = default;
         virtual void increaseCombatPower(int num = 1) {
             combatPower += (num * 2);
         }
