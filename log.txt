@@ -1,0 +1,380 @@
+* commit 902003afa7344e2a678791135dc3f55d155b745c
+| Author: Yazan <yazan@example.com>
+| Date:   Wed Aug 14 15:29:20 2024 +0300
+| 
+|     add destrctor
+| 
+|  Events/Event.h |  1 +
+|  MatamStory.cpp | 13 ++++---------
+|  2 files changed, 5 insertions(+), 9 deletions(-)
+| 
+* commit aa2877fb9a78cb681ad90115f2804e39bd24be60
+| Author: Yazan <yazan@example.com>
+| Date:   Tue Aug 13 18:57:45 2024 +0300
+| 
+|     fix small bug
+| 
+|  MatamStory.cpp     |   5 +-
+|  Players/Player.cpp | 171 +++++++++++++++++++++++++++------------------------
+|  2 files changed, 94 insertions(+), 82 deletions(-)
+| 
+* commit aefbaa6fcdca5d77c4296bdebd874af2bc1899da
+| Author: Yazan <yazan@example.com>
+| Date:   Mon Aug 12 19:38:04 2024 +0300
+| 
+|     fix the proplem of newline in players
+| 
+|  MatamStory.cpp | 62 ++++++++++++++++++++++++++++++--------------------------
+|  1 file changed, 33 insertions(+), 29 deletions(-)
+| 
+* commit 26f1c66b07f0eac477371d1179d97486c8958a09
+| Author: Yazan <yazan@example.com>
+| Date:   Mon Aug 12 19:24:44 2024 +0300
+| 
+|     fix the pack incress proplem
+| 
+|  Events/Event.h     | 28 ++++++++++++++--------------
+|  Players/Player.cpp | 36 ++++++++++++++++++++++++------------
+|  2 files changed, 38 insertions(+), 26 deletions(-)
+| 
+* commit d34331e1204755b8cec97150bcf6111e5d18b2ae
+| Author: Yazan <yazan@example.com>
+| Date:   Sun Aug 11 16:27:56 2024 +0300
+| 
+|      fix bug
+| 
+|  MatamStory.cpp | 393 +++++--------------------------------------------------
+|  1 file changed, 30 insertions(+), 363 deletions(-)
+| 
+* commit 57bcedbcb4d94e769784e57f04faf8fdc378fe80
+| Author: Yazan <yazan@example.com>
+| Date:   Sun Aug 11 15:59:36 2024 +0300
+| 
+|     ithing this code work
+| 
+|  Events/Event.h     |   2 +-
+|  MatamStory.cpp     | 555 ++++++++++++++++++++++++++++-----------------------
+|  MatamStory.h       |   5 +
+|  Players/Player.cpp |  23 ---
+|  4 files changed, 307 insertions(+), 278 deletions(-)
+| 
+* commit e95803d627bf9235ea97f8c18ae8bdda3e9ca242
+| Author: Yazan <yazan@example.com>
+| Date:   Sat Aug 10 20:13:37 2024 +0300
+| 
+|     last thing i do the pack in matam story dont work
+| 
+|  Events/Event.cpp   | 174 +++++++++++++++++-
+|  Events/Event.h     |  29 +--
+|  MatamStory.cpp     | 490 +++++++++++++++++++++++++++++++++------------------
+|  Players/Player.cpp |  10 +-
+|  Players/Player.h   |   2 +-
+|  test2.out          |   1 +
+|  test3.out          |   1 +
+|  testfile.cpp       |   3 +
+|  8 files changed, 521 insertions(+), 189 deletions(-)
+| 
+* commit 4ad83edee6fb49fbace3ef7926f11c7c11bd2f86
+| Author: Yazan <yazan@example.com>
+| Date:   Fri Aug 9 02:12:21 2024 +0300
+| 
+|     the code passs all the testem
+| 
+|  Events/Event.h     |  6 +++---
+|  MatamStory.cpp     | 12 ++++++------
+|  Players/Player.cpp | 26 +++++++++++++++++++++++---
+|  test1.out          |  1 +
+|  4 files changed, 33 insertions(+), 12 deletions(-)
+| 
+* commit 1c8032aa0e71dddf111d7aa86b262786e0653e91
+| Author: Yazan <yazan@example.com>
+| Date:   Fri Aug 9 00:57:08 2024 +0300
+| 
+|     the code work 70% he cant read spicealevent
+| 
+|  Events/Event.cpp   | 117 +------------------------
+|  Events/Event.h     |  32 +++----
+|  MatamStory         | Bin 0 -> 399768 bytes
+|  MatamStory.cpp     | 235 +++++++++++++++++++++++++++++++++++----------------
+|  MatamStory.h       |   2 +-
+|  Players/Player.cpp |  35 +++-----
+|  Players/Player.h   |  31 +++++--
+|  7 files changed, 215 insertions(+), 237 deletions(-)
+| 
+* commit 82d974ef958f9c6643b4c07c49f8d015b268dd66
+| Author: Yazan <yazan@example.com>
+| Date:   Thu Aug 8 16:37:58 2024 +0300
+| 
+|     fix the event in the constructor of matamstory still to fix the player
+| 
+|  Events/Event.h     | 106 +++++++++--------
+|  MatamStory.cpp     | 316 +++++++++++++++++++++++++++++++++------------------
+|  Players/Player.cpp |  97 ++++++++++++----
+|  Players/Player.h   |  18 ++-
+|  4 files changed, 348 insertions(+), 189 deletions(-)
+| 
+* commit b2e3bb604c0a47dbd1827bd72dc125f0c154b481
+| Author: Yazan <yazan@example.com>
+| Date:   Wed Aug 7 16:36:48 2024 +0300
+| 
+|     the last thing i do
+| 
+|  Events/Event.cpp   | 118 ++++++++++++++++++++++++++++++++---
+|  Events/Event.h     | 107 ++++++++++++++++++-------------
+|  MatamStory.cpp     | 173 ++++++++++++++++++++++++++++++++++++++++++++++-----
+|  MatamStory.h       |  12 +++-
+|  Players/Player.cpp |  25 +++++---
+|  Players/Player.h   |   3 +-
+|  6 files changed, 363 insertions(+), 75 deletions(-)
+| 
+* commit 5cee18944d32322807741014d593dbf40281ee80
+| Author: Yazan <yazan@example.com>
+| Date:   Tue Aug 6 23:03:07 2024 +0300
+| 
+|     new thing in matamstrory.cpp
+| 
+|  CMakeLists.txt |  20 ++++++++
+|  MatamStory.cpp | 145 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
+|  2 files changed, 161 insertions(+), 4 deletions(-)
+| 
+* commit 440f54822dbf11a0f6623294932bbed496830415
+| Author: Yazan <yazan@example.com>
+| Date:   Sun Aug 4 22:57:27 2024 +0300
+| 
+|     new thing
+| 
+|  Events/Event.cpp   |  14 ++++
+|  Events/Event.h     | 208 ++++++++++++++++++++++++++++++++++++++++++++++++++-
+|  MatamStory.cpp     |  63 +++++++++++++++-
+|  MatamStory.h       |  13 +++-
+|  Players/Player.cpp | 122 ++++++++++++++++++++++++++++++
+|  Players/Player.h   | 100 ++++++++++++++++++++++++-
+|  6 files changed, 512 insertions(+), 8 deletions(-)
+| 
+* commit ba0b3459f0f82d3907c4e294da2bff54ad0ad1c3
+| Author: Adi Harif <adi.harif@campus.technion.ac.il>
+| Date:   Sun Aug 4 19:43:54 2024 +0300
+| 
+|     [bugfix] Changes utilities function to iterate over size_t variable instead of unsigned int
+| 
+|  Utilities.cpp | 6 +++---
+|  1 file changed, 3 insertions(+), 3 deletions(-)
+| 
+* commit ecc9258c6f2aa2c9c091a7738587e206586a1c14
+| Author: Adi Harif <adi.harif@campus.technion.ac.il>
+| Date:   Sun Aug 4 08:16:59 2024 +0300
+| 
+|     [format] Changes tests eol format to LF instead of CRLF
+| 
+|  tests/test1.events  | 8 ++++----
+|  tests/test1.players | 4 ++--
+|  tests/test2.events  | 6 +++---
+|  tests/test2.players | 4 ++--
+|  tests/test3.events  | 8 ++++----
+|  tests/test3.players | 2 +-
+|  6 files changed, 16 insertions(+), 16 deletions(-)
+|   
+| * commit f96afc412d9bb9c00e875e83a9725b684f140be0
+| | Author: Yazan <yazan@example.com>
+| | Date:   Sun Aug 4 22:11:45 2024 +0300
+| | 
+| |      test for the branch
+| | 
+| |  MatamStory.cpp | 1 +
+| |  1 file changed, 1 insertion(+)
+| | 
+| * commit 28c82b128b9194d027b931b5c72b0ccf88e8ed3f
+| | Author: Yazan <yazan@example.com>
+| | Date:   Sun Aug 4 22:07:19 2024 +0300
+| | 
+| |     new things
+| | 
+| |  Events/Event.cpp   |   2 -
+| |  Events/Event.h     | 185 +++++++++++++++++++++++++++++++++++--------------
+| |  MatamStory.cpp     |  61 +++++++++++++++-
+| |  MatamStory.h       |   7 +-
+| |  Players/Player.cpp |  40 ++++++-----
+| |  Players/Player.h   |  24 ++++++-
+| |  6 files changed, 240 insertions(+), 79 deletions(-)
+| | 
+| * commit f55029192aa736e0fbad370d6e26e362773c03a7
+| | Author: Yazan <yazan@example.com>
+| | Date:   Fri Aug 2 19:58:23 2024 +0300
+| | 
+| |     yazan coed
+| | 
+| |  Events/Event.cpp    |  19 ++++++-
+| |  Events/Event.h      | 147 +++++++++++++++++++++++++++++++++++++++++++-----
+| |  MatamStory.cpp      |   3 +-
+| |  MatamStory.h        |  14 +++++
+| |  Players/Player.cpp  | 116 ++++++++++++++++++++++++++++++++++++++
+| |  Players/Player.h    |  78 ++++++++++++++++++++++++-
+| |  Players/Players.cpp |   3 -
+| |  7 files changed, 358 insertions(+), 22 deletions(-)
+| | 
+| * commit bbd4da753110089d098817eb1bb9aa04918c48d2
+|/  Author: Yazan <yazan@example.com>
+|   Date:   Thu Aug 1 13:45:40 2024 +0300
+|   
+|       test
+|   
+|    .idea/.gitignore    |  8 ++++++++
+|    .idea/HW4.iml       |  8 ++++++++
+|    .idea/misc.xml      |  4 ++++
+|    .idea/modules.xml   |  8 ++++++++
+|    .idea/vcs.xml       |  6 ++++++
+|    CMakeLists.txt      | 17 +++++++++++++++++
+|    Events/Event.cpp    |  3 +++
+|    Players/Players.cpp |  3 +++
+|    8 files changed, 57 insertions(+)
+| 
+* commit 6d0b58bcecef6fc2291c09f654a978cc382c3e31
+| Author: AdiHarif <adi.harif@campus.technion.ac.il>
+| Date:   Mon Jul 29 21:47:45 2024 +0300
+| 
+|     Adds supplied files
+| 
+|  Events/Event.h       |  14 +++++
+|  MatamStory.cpp       |  74 +++++++++++++++++++++++++
+|  MatamStory.h         |  55 +++++++++++++++++++
+|  Players/Player.h     |  51 +++++++++++++++++
+|  Utilities.cpp        | 117 +++++++++++++++++++++++++++++++++++++++
+|  Utilities.h          | 146 +++++++++++++++++++++++++++++++++++++++++++++++++
+|  main.cpp             |  40 ++++++++++++++
+|  tests/test1.events   |   5 ++
+|  tests/test1.expected |  96 ++++++++++++++++++++++++++++++++
+|  tests/test1.players  |   3 +
+|  tests/test2.events   |   4 ++
+|  tests/test2.expected |   1 +
+|  tests/test2.players  |   3 +
+|  tests/test3.events   |   5 ++
+|  tests/test3.expected |   1 +
+|  tests/test3.players  |   2 +
+|  16 files changed, 617 insertions(+)
+| 
+* commit beadb33ed4c7dd2da9d4078b9de6253232c67a46
+  Author: AdiHarif <adi.harif@campus.technion.ac.il>
+  Date:   Mon Jul 29 21:46:59 2024 +0300
+  
+      Initial Commit - Adds README.md file
+  
+   README.md | 7 +++++++
+   1 file changed, 7 insertions(+)
+  
+* commit 25340fe00a022de598574536ed6dac06d29ea0d8
+| Author: Bayan <bayanbadir@MAC.local>
+| Date:   Sat Aug 3 23:31:27 2024 +0300
+| 
+|     waiting for more tests
+| 
+|  Events/Balrog.cpp        |   4 +-
+|  Events/Balrog.h          |   2 +-
+|  Events/Encounter.cpp     |  18 +-
+|  Events/Encounter.h       |  10 +-
+|  Events/Event.h           |   2 +-
+|  Events/Pack.cpp          |   3 +-
+|  Events/Pack.h            |   5 +-
+|  Events/PotionsMerchant.h |   3 +-
+|  Events/Slime.cpp         |   4 +-
+|  Events/Slime.h           |   4 +-
+|  Events/Snail.cpp         |   2 +-
+|  Events/Snail.h           |   3 +-
+|  Events/SolarEclipse.h    |   4 +-
+|  MatamStory.cpp           | 495 ++++++++++++++++++++++++++++++++++++---------
+|  MatamStory.h             |  23 ++-
+|  Players/Archer.cpp       |   5 +-
+|  Players/Archer.h         |   3 +-
+|  Players/Magician.h       |   2 +-
+|  Players/Player.cpp       |   9 +-
+|  Players/Player.h         |   4 +-
+|  Players/Warrior.cpp      |   7 +-
+|  Players/Warrior.h        |   6 +-
+|  22 files changed, 483 insertions(+), 135 deletions(-)
+| 
+* commit bb5cb34811b04c82605d58f6813b955c2c6547c5
+| Author: Bayan <bayanbadir@MAC.local>
+| Date:   Wed Jul 31 14:36:42 2024 +0300
+| 
+|     updated things
+| 
+|  .idea/vcs.xml              | 10 +++++-----
+|  Events/PotionsMerchant.cpp | 40 ++++++++++++++++++++++++++++++++++++++++
+|  Events/PotionsMerchant.h   | 22 ++++++++++++++++++++++
+|  Events/SolarEclipse.cpp    | 29 +++++++++++++++++++++++++++++
+|  Events/SolarEclipse.h      | 20 ++++++++++++++++++++
+|  Players/Archer.cpp         | 24 ++++++++++++++++++++++++
+|  Players/Archer.h           | 17 +++++++++++++++++
+|  Players/Magician.cpp       | 24 ++++++++++++++++++++++++
+|  Players/Magician.h         | 19 +++++++++++++++++++
+|  Players/Player.cpp         | 14 +++++++-------
+|  Players/Player.h           | 12 ++++++------
+|  Players/Warrior.cpp        | 14 +++++++-------
+|  Players/Warrior.h          | 17 +++++++++++++++++
+|  13 files changed, 237 insertions(+), 25 deletions(-)
+| 
+* commit f733e7a103d0c2080da590de911e08d787597c1e
+| Author: Yazan <yazan@example.com>
+| Date:   Tue Jul 30 23:32:04 2024 +0300
+| 
+|     test
+| 
+|  .idea/HW4.iml  |  2 ++
+|  .idea/vcs.xml  |  6 ++++++
+|  CMakeLists.txt | 18 ++++++++++++++++++
+|  3 files changed, 26 insertions(+)
+| 
+* commit 57ef5b549679f8653d0303567ac0e95546ebea03
+  Author: Bayan <bayanbadir@MAC.local>
+  Date:   Tue Jul 30 22:51:15 2024 +0300
+  
+      this is just the beginning
+  
+   .DS_Store                                      | Bin 0 -> 6148 bytes
+   .idea/.gitignore                               |   8 +
+   .idea/copyright/profiles_settings.xml          |   9 +
+   .idea/inspectionProfiles/profiles_settings.xml |   6 +
+   .idea/misc.xml                                 |  56 ++++++
+   .idea/modules.xml                              |   8 +
+   .idea/mtm_hw4.iml                              |   8 +
+   .vscode/settings.json                          |  61 +++++++
+   Events/Balrog.cpp                              |  16 ++
+   Events/Balrog.h                                |  22 +++
+   Events/Encounter.cpp                           |  27 +++
+   Events/Encounter.h                             |  22 +++
+   Events/Event.cpp                               |   8 +
+   Events/Event.h                                 |  23 +++
+   Events/Pack.cpp                                |  27 +++
+   Events/Pack.h                                  |  19 ++
+   Events/PotionsMerchant.cpp                     |   0
+   Events/PotionsMerchant.h                       |   0
+   Events/Slime.cpp                               |  16 ++
+   Events/Slime.h                                 |  22 +++
+   Events/Snail.cpp                               |  16 ++
+   Events/Snail.h                                 |  22 +++
+   Events/SolarEclipse.cpp                        |   0
+   Events/SolarEclipse.h                          |   0
+   Exception.h                                    |  27 +++
+   MatamStory.cpp                                 | 220 +++++++++++++++++++++++
+   MatamStory.h                                   |  92 ++++++++++
+   Players/Archer.cpp                             |   0
+   Players/Archer.h                               |   0
+   Players/Magician.cpp                           |   0
+   Players/Magician.h                             |   0
+   Players/Player.cpp                             |  83 +++++++++
+   Players/Player.h                               |  83 +++++++++
+   Players/Warrior.cpp                            |  28 +++
+   Players/Warrior.h                              |   0
+   README.md                                      |   7 +
+   Utilities.cpp                                  | 117 ++++++++++++
+   Utilities.h                                    | 146 +++++++++++++++
+   main.cpp                                       |  40 +++++
+   tests/test1.events                             |   5 +
+   tests/test1.expected                           |  96 ++++++++++
+   tests/test1.players                            |   3 +
+   tests/test2.events                             |   4 +
+   tests/test2.expected                           |   1 +
+   tests/test2.players                            |   3 +
+   tests/test3.events                             |   5 +
+   tests/test3.expected                           |   1 +
+   tests/test3.players                            |   2 +
+   48 files changed, 1359 insertions(+)
